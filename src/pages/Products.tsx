@@ -41,8 +41,8 @@ const Products = () => {
       title: "Products | Aya Home Project",
       description:
         "Browse Aya Home Project products: handcrafted chairs and custom furniture for residential and hospitality spaces.",
-      canonicalUrl: "https://ayahomeproject.id/products",
-      imageUrl: "https://ayahomeproject.id/og-ayahomeproject.jpg",
+      canonicalUrl: "https://ayahomeproject.com/products",
+      imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
       keywords: ["furniture products", "custom chairs", "hospitality furniture", "Aya Home Project"],
     });
   }, []);

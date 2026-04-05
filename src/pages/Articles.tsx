@@ -78,8 +78,8 @@ const Articles = () => {
       title: "Articles | Aya Home Project",
       description:
         "Read Aya Home Project articles about interior tips, furniture care, and design guidance for homes and hospitality spaces.",
-      canonicalUrl: "https://ayahomeproject.id/articles",
-      imageUrl: "https://ayahomeproject.id/og-ayahomeproject.jpg",
+      canonicalUrl: "https://ayahomeproject.com/articles",
+      imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
       keywords: ["furniture articles", "interior tips", "furniture maintenance", "Aya Home Project blog"],
     });
   }, []);

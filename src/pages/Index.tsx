@@ -45,8 +45,8 @@ const Index = () => {
       title: "Aya Home Project | Custom Furniture Indonesia",
       description:
         "Custom furniture from Jepara for homes, cafes, restaurants, hotels, and hospitality projects worldwide.",
-      canonicalUrl: "https://ayahomeproject.id/",
-      imageUrl: "https://ayahomeproject.id/og-ayahomeproject.jpg",
+      canonicalUrl: "https://ayahomeproject.com/",
+      imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
       keywords: ["custom furniture", "Jepara furniture", "furniture Indonesia", "Aya Home Project"],
     });
   }, []);

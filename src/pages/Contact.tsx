@@ -16,8 +16,8 @@ const Contact = () => {
       title: "Contact Aya Home Project",
       description:
         "Contact Aya Home Project for custom furniture consultation, project inquiries, and international orders.",
-      canonicalUrl: "https://ayahomeproject.id/contact",
-      imageUrl: "https://ayahomeproject.id/og-ayahomeproject.jpg",
+      canonicalUrl: "https://ayahomeproject.com/contact",
+      imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
       keywords: ["contact Aya Home Project", "furniture consultation", "international furniture inquiry"],
     });
   }, []);

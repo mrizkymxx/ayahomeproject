@@ -4,4 +4,4 @@ Disallow: /admin
 Disallow: /admin/
 Disallow: /admin/*
 
-Sitemap: https://ayahomeproject.id/sitemap.xml
+Sitemap: https://ayahomeproject.com/sitemap.xml

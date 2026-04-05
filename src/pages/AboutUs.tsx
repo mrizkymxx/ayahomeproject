@@ -48,8 +48,8 @@ const AboutUs = () => {
       title: "About Aya Home Project | Jepara Craftsmanship",
       description:
         "Discover Aya Home Project's story, craftsmanship roots in Jepara, and international-ready custom furniture capabilities.",
-      canonicalUrl: "https://ayahomeproject.id/about",
-      imageUrl: "https://ayahomeproject.id/og-ayahomeproject.jpg",
+      canonicalUrl: "https://ayahomeproject.com/about",
+      imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
       keywords: ["about Aya Home Project", "Jepara craftsmanship", "custom furniture workshop"],
     });
   }, []);

@@ -36,7 +36,7 @@ type ProductSeoMetaInput = {
   specs?: Record<string, string>;
 };
 
-const DEFAULT_SEO_IMAGE = "https://ayahomeproject.id/og-ayahomeproject.jpg";
+const DEFAULT_SEO_IMAGE = "https://ayahomeproject.com/og-ayahomeproject.jpg";
 
 const STOP_WORDS = new Set([
   "the",
@@ -232,7 +232,7 @@ export function applyPageSeoMeta(input: PageSeoMetaInput): void {
 
   upsertJsonLd("webpage", {
     "@context": "https://schema.org",
-    "@type": input.canonicalUrl === "https://ayahomeproject.id/" ? "WebSite" : "WebPage",
+    "@type": input.canonicalUrl === "https://ayahomeproject.com/" ? "WebSite" : "WebPage",
     name: input.title,
     description: input.description,
     url: input.canonicalUrl,

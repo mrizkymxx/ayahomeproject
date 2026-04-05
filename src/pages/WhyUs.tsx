@@ -59,8 +59,8 @@ const WhyUs = () => {
       title: "Why Aya Home Project | Quality & Process",
       description:
         "See why clients choose Aya Home Project: premium materials, transparent process, expert craftsmanship, and after-sales support.",
-      canonicalUrl: "https://ayahomeproject.id/why-us",
-      imageUrl: "https://ayahomeproject.id/og-ayahomeproject.jpg",
+      canonicalUrl: "https://ayahomeproject.com/why-us",
+      imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
       keywords: ["why choose Aya Home Project", "furniture quality", "custom furniture process"],
     });
   }, []);

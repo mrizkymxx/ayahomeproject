@@ -11,7 +11,7 @@ const NotFound = () => {
       title: "Page Not Found | Aya Home Project",
       description: "The page you are looking for does not exist.",
       canonicalUrl: `${window.location.origin}${location.pathname}`,
-      imageUrl: "https://ayahomeproject.id/og-ayahomeproject.jpg",
+      imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
       robots: "noindex,nofollow",
     });
   }, [location.pathname]);
