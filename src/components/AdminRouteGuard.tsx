@@ -28,6 +28,7 @@ const AdminRouteGuard = () => {
     const unsubscribe = onAdminAuthStateChange((ok) => {
       if (!mounted) return;
       setLoggedIn(ok);
+      setLoading(false);
     });
 
     return () => {
