@@ -1,11 +1,19 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { applyPageSeoMeta } from "@/lib/seo";
 
 const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+    applyPageSeoMeta({
+      title: "Page Not Found | Aya Home Project",
+      description: "The page you are looking for does not exist.",
+      canonicalUrl: `${window.location.origin}${location.pathname}`,
+      imageUrl: "https://ayahomeproject.id/og-ayahomeproject.jpg",
+      robots: "noindex,nofollow",
+    });
   }, [location.pathname]);
 
   return (

@@ -1,3 +1,3 @@
-# Welcome to your Lovable project
+# Aya Home Project
 
 TODO: Document your project here

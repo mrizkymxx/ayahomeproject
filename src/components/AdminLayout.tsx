@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, Outlet } from "react-router-dom";
 import { LayoutDashboard, Package, FileText, Mail, LogOut, Menu, X } from "lucide-react";
+import { logoutAdmin } from "@/lib/admin-auth";
 
 const adminNav = [
   { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
@@ -18,7 +19,7 @@ const AdminLayout = () => {
       {/* Sidebar */}
       <aside className={`${sidebarOpen ? "w-64" : "w-0 overflow-hidden"} bg-foreground text-primary-foreground transition-all duration-300 flex flex-col`}>
         <div className="p-6">
-          <h2 className="font-serif text-xl font-bold">Loewes Admin</h2>
+          <h2 className="font-serif text-xl font-bold">Aya Home Project Admin</h2>
         </div>
         <nav className="flex-1 px-4 space-y-1">
           {adminNav.map((item) => (
@@ -37,6 +38,16 @@ const AdminLayout = () => {
           ))}
         </nav>
         <div className="p-4">
+          <Link
+            to="/admin/login"
+            onClick={() => {
+              void logoutAdmin();
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-primary-foreground/10 rounded-lg transition-colors mb-2"
+          >
+            <LogOut size={18} />
+            Logout Admin
+          </Link>
           <Link to="/" className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-primary-foreground/10 rounded-lg transition-colors">
             <LogOut size={18} />
             Back to Site

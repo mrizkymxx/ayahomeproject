@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const navItems = [
   { label: "HOME", path: "/" },
@@ -14,13 +14,22 @@ const navItems = [
 const Navbar = () => {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="bg-background py-6 px-6 lg:px-12">
+    <header className={`sticky top-0 z-50 bg-background py-6 px-6 lg:px-12 transition-shadow duration-300 ${scrolled ? 'shadow-md' : ''}`}>
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <Link to="/" className="flex flex-col leading-tight">
-          <span className="font-serif text-2xl lg:text-3xl font-bold tracking-tight">Loewes</span>
-          <span className="font-serif text-2xl lg:text-3xl font-bold tracking-tight">Furniture<sup className="text-xs">©</sup></span>
+          <span className="font-serif text-2xl lg:text-3xl font-bold tracking-tight">AYAHOMEPROJECT</span>
+          <span className="font-sans text-xs lg:text-sm tracking-[0.18em] text-muted-foreground">OFFICIAL SITE</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
@@ -34,10 +43,6 @@ const Navbar = () => {
             </Link>
           ))}
         </nav>
-
-        <div className="hidden md:block">
-          <span className="font-serif text-3xl italic font-bold tracking-tight opacity-80">loler</span>
-        </div>
 
         <button className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}

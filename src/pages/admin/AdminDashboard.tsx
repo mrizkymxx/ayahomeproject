@@ -1,13 +1,64 @@
+import { useEffect, useMemo, useState } from "react";
 import { Package, FileText, Mail, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
-const stats = [
-  { label: "Products", value: "6", icon: Package, path: "/admin/products" },
-  { label: "Articles", value: "3", icon: FileText, path: "/admin/articles" },
-  { label: "Messages", value: "0", icon: Mail, path: "/admin/messages" },
-];
+type DashboardCounts = {
+  products: number | null;
+  articles: number | null;
+  messages: number | null;
+};
 
 const AdminDashboard = () => {
+  const [counts, setCounts] = useState<DashboardCounts>({
+    products: null,
+    articles: null,
+    messages: null,
+  });
+
+  useEffect(() => {
+    let active = true;
+
+    async function fetchCounts() {
+      const [productsResult, articlesResult, messagesResult] = await Promise.all([
+        supabase.from("products").select("id", { count: "exact", head: true }),
+        supabase.from("articles").select("id", { count: "exact", head: true }),
+        supabase.from("inquiries").select("id", { count: "exact", head: true }),
+      ]);
+
+      if (!active) return;
+
+      if (productsResult.error || articlesResult.error || messagesResult.error) {
+        console.error("Error fetching admin dashboard stats:", {
+          products: productsResult.error,
+          articles: articlesResult.error,
+          messages: messagesResult.error,
+        });
+      }
+
+      setCounts({
+        products: productsResult.error ? null : (productsResult.count ?? 0),
+        articles: articlesResult.error ? null : (articlesResult.count ?? 0),
+        messages: messagesResult.error ? null : (messagesResult.count ?? 0),
+      });
+    }
+
+    fetchCounts();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const stats = useMemo(
+    () => [
+      { label: "Products", value: counts.products, icon: Package, path: "/admin/products" },
+      { label: "Articles", value: counts.articles, icon: FileText, path: "/admin/articles" },
+      { label: "Messages", value: counts.messages, icon: Mail, path: "/admin/messages" },
+    ],
+    [counts.articles, counts.messages, counts.products],
+  );
+
   return (
     <div>
       <h2 className="font-serif text-2xl mb-6">Overview</h2>
@@ -19,14 +70,14 @@ const AdminDashboard = () => {
             to={stat.path}
             className="bg-background border border-border rounded-xl p-6 hover:shadow-md transition-shadow"
           >
-            <div className="flex items-center justify-between mb-4">
-              <stat.icon size={24} className="text-muted-foreground" />
-              <TrendingUp size={16} className="text-green-500" />
-            </div>
-            <p className="font-serif text-3xl font-bold">{stat.value}</p>
-            <p className="text-sm text-muted-foreground">{stat.label}</p>
-          </Link>
-        ))}
+              <div className="flex items-center justify-between mb-4">
+                <stat.icon size={24} className="text-muted-foreground" />
+                <TrendingUp size={16} className="text-green-500" />
+              </div>
+              <p className="font-serif text-3xl font-bold">{stat.value ?? "-"}</p>
+              <p className="text-sm text-muted-foreground">{stat.label}</p>
+            </Link>
+          ))}
       </div>
 
       <div className="bg-background border border-border rounded-xl p-6">
