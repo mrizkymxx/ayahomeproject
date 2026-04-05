@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Link, useLocation, Outlet } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
 import { LayoutDashboard, Package, FileText, Mail, LogOut, Menu, X } from "lucide-react";
 import { logoutAdmin } from "@/lib/admin-auth";
+import { useToast } from "@/hooks/use-toast";
 
 const adminNav = [
   { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
@@ -10,9 +11,81 @@ const adminNav = [
   { label: "Messages", path: "/admin/messages", icon: Mail },
 ];
 
+const ADMIN_IDLE_TIMEOUT_MS = 30 * 60 * 1000;
+
 const AdminLayout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const isLoggingOutRef = useRef(false);
+  const idleTimerRef = useRef<number | null>(null);
+
+  const handleLogout = useCallback(
+    async (reason: "manual" | "idle") => {
+      if (isLoggingOutRef.current) return;
+
+      isLoggingOutRef.current = true;
+      setLoggingOut(true);
+
+      const result = await logoutAdmin();
+      if (!result.success) {
+        isLoggingOutRef.current = false;
+        setLoggingOut(false);
+        toast({
+          variant: "destructive",
+          title: "Logout failed",
+          description: result.message || "Unable to end admin session.",
+        });
+        return;
+      }
+
+      const params = new URLSearchParams();
+      if (reason === "idle") {
+        params.set("reason", "idle");
+      }
+
+      const query = params.toString();
+      navigate(`/admin/login${query ? `?${query}` : ""}`, { replace: true });
+    },
+    [navigate, toast]
+  );
+
+  const resetIdleTimer = useCallback(() => {
+    if (idleTimerRef.current !== null) {
+      window.clearTimeout(idleTimerRef.current);
+    }
+
+    idleTimerRef.current = window.setTimeout(() => {
+      void handleLogout("idle");
+    }, ADMIN_IDLE_TIMEOUT_MS);
+  }, [handleLogout]);
+
+  useEffect(() => {
+    const activityEvents: Array<keyof WindowEventMap> = [
+      "mousemove",
+      "mousedown",
+      "keydown",
+      "touchstart",
+      "scroll",
+    ];
+
+    activityEvents.forEach((eventName) => {
+      window.addEventListener(eventName, resetIdleTimer);
+    });
+    resetIdleTimer();
+
+    return () => {
+      if (idleTimerRef.current !== null) {
+        window.clearTimeout(idleTimerRef.current);
+      }
+
+      activityEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, resetIdleTimer);
+      });
+    };
+  }, [resetIdleTimer]);
 
   return (
     <div className="min-h-screen flex bg-muted">
@@ -38,16 +111,17 @@ const AdminLayout = () => {
           ))}
         </nav>
         <div className="p-4">
-          <Link
-            to="/admin/login"
+          <button
+            type="button"
             onClick={() => {
-              void logoutAdmin();
+              void handleLogout("manual");
             }}
+            disabled={loggingOut}
             className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-primary-foreground/10 rounded-lg transition-colors mb-2"
           >
             <LogOut size={18} />
-            Logout Admin
-          </Link>
+            {loggingOut ? "Logging out..." : "Logout Admin"}
+          </button>
           <Link to="/" className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-primary-foreground/10 rounded-lg transition-colors">
             <LogOut size={18} />
             Back to Site

@@ -5,6 +5,26 @@ type AdminCheckResult = {
   message?: string;
 };
 
+type AdminAuthActionResult = {
+  success: boolean;
+  message?: string;
+};
+
+const MISSING_SESSION_ERROR_FRAGMENT = "auth session missing";
+
+function isMissingSessionError(message?: string): boolean {
+  return Boolean(message?.toLowerCase().includes(MISSING_SESSION_ERROR_FRAGMENT));
+}
+
+async function clearAdminLocalSession(): Promise<AdminAuthActionResult> {
+  const { error } = await supabase.auth.signOut({ scope: "local" });
+  if (error && !isMissingSessionError(error.message)) {
+    return { success: false, message: error.message };
+  }
+
+  return { success: true };
+}
+
 async function checkAdminAccess(userId: string): Promise<AdminCheckResult> {
   const { data, error } = await supabase
     .from("admin_users")
@@ -25,10 +45,21 @@ async function checkAdminAccess(userId: string): Promise<AdminCheckResult> {
 export async function isAdminLoggedIn(): Promise<boolean> {
   const {
     data: { session },
+    error,
   } = await supabase.auth.getSession();
+
+  if (error) {
+    await clearAdminLocalSession();
+    return false;
+  }
 
   if (!session?.user?.id) return false;
   const check = await checkAdminAccess(session.user.id);
+
+  if (!check.allowed) {
+    await clearAdminLocalSession();
+  }
+
   return check.allowed;
 }
 
@@ -42,6 +73,11 @@ export function onAdminAuthStateChange(callback: (isLoggedIn: boolean) => void):
     }
 
     const check = await checkAdminAccess(session.user.id);
+
+    if (!check.allowed) {
+      await clearAdminLocalSession();
+    }
+
     callback(check.allowed);
   });
 
@@ -65,13 +101,21 @@ export async function loginAdmin(email: string, password: string): Promise<{ suc
 
   const userId = data.user?.id;
   if (!userId) {
-    await supabase.auth.signOut();
+    const clearSession = await clearAdminLocalSession();
+    if (!clearSession.success) {
+      return clearSession;
+    }
+
     return { success: false, message: "Unable to verify account." };
   }
 
   const check = await checkAdminAccess(userId);
   if (!check.allowed) {
-    await supabase.auth.signOut();
+    const clearSession = await clearAdminLocalSession();
+    if (!clearSession.success) {
+      return clearSession;
+    }
+
     return {
       success: false,
       message: check.message || "This account is not authorized for admin dashboard.",
@@ -81,6 +125,6 @@ export async function loginAdmin(email: string, password: string): Promise<{ suc
   return { success: true };
 }
 
-export async function logoutAdmin(): Promise<void> {
-  await supabase.auth.signOut();
+export async function logoutAdmin(): Promise<AdminAuthActionResult> {
+  return clearAdminLocalSession();
 }

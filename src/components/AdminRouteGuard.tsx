@@ -12,10 +12,15 @@ const AdminRouteGuard = () => {
     let mounted = true;
 
     const check = async () => {
-      const ok = await isAdminLoggedIn();
-      if (mounted) {
-        setLoggedIn(ok);
-        setLoading(false);
+      try {
+        const ok = await isAdminLoggedIn();
+        if (mounted) {
+          setLoggedIn(ok);
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 

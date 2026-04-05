@@ -17,9 +17,14 @@ function useNextPath(): string {
 }
 
 const AdminLogin = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const nextPath = useNextPath();
+  const logoutReason = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get("reason");
+  }, [location.search]);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -34,11 +39,32 @@ const AdminLogin = () => {
   const [pandaPose, setPandaPose] = useState<PandaPose>("normal");
 
   useEffect(() => {
-    isAdminLoggedIn().then((ok) => {
-      setLoggedIn(ok);
-      setReady(true);
-    });
+    let mounted = true;
+
+    isAdminLoggedIn()
+      .then((ok) => {
+        if (!mounted) return;
+        setLoggedIn(ok);
+      })
+      .finally(() => {
+        if (mounted) {
+          setReady(true);
+        }
+      });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
+
+  useEffect(() => {
+    if (logoutReason !== "idle") return;
+
+    toast({
+      title: "Session ended",
+      description: "You were logged out automatically because the admin dashboard was inactive.",
+    });
+  }, [logoutReason, toast]);
 
   useEffect(() => {
     const onPointerDown = (event: PointerEvent) => {
