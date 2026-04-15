@@ -55,11 +55,11 @@ const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <span className="font-serif text-xl font-bold">AYAHOMEPROJECT</span>
-              <p className="font-sans text-xs tracking-[0.18em] mt-1 text-muted-foreground">OFFICIAL SITE</p>
+              <p className="font-sans text-xs tracking-[0.18em] mt-1 text-muted-foreground">SUAR WOOD SPECIALIST</p>
             </div>
 
             <div>
-              <h4 className="font-sans font-semibold text-sm mb-3">Our Office</h4>
+              <h4 className="font-sans font-semibold text-sm mb-3">Our Workshop</h4>
               <div className="text-sm text-muted-foreground space-y-1 leading-6">
                 <p className="font-semibold text-foreground">Aya Home Project</p>
                 <p>Sidomulyo Street, RT 5 RW 3</p>

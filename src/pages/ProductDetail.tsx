@@ -92,7 +92,7 @@ const ProductDetail = () => {
       ? primaryImage
       : `${window.location.origin}${primaryImage.startsWith("/") ? primaryImage : `/${primaryImage}`}`;
     const description = buildExcerpt(
-      product.description || `${product.name} custom furniture by Aya Home Project.`,
+      product.description || `${product.name} — premium Suar wood furniture handcrafted by Aya Home Project, Jepara.`,
       product.name,
       160,
     );
@@ -110,8 +110,9 @@ const ProductDetail = () => {
       keywords: [
         product.name,
         product.category?.name || "",
-        "custom furniture",
-        "Jepara furniture",
+        "suar wood furniture",
+        "live edge table",
+        "trembesi wood",
         "Aya Home Project",
       ].filter(Boolean),
       specs: product.specifications || undefined,
@@ -133,7 +134,7 @@ const ProductDetail = () => {
     const url = encodeURIComponent(window.location.href);
     const text = encodeURIComponent(`Check out ${product.name} from Aya Home Project!`);
     const shareUrls: Record<string, string> = {
-      whatsapp: `https://wa.me/628164823454?text=${encodeURIComponent(`Hello Aya Home Project, I am interested in ordering ${product.name}.`)}`,
+      whatsapp: `https://wa.me/628164823454?text=${encodeURIComponent(`Hello Aya Home Project, I am interested in ordering ${product.name}. Can you send me more details about this Suar wood piece?`)}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
       twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
     };
@@ -253,10 +254,10 @@ const ProductDetail = () => {
               <div className="border border-border rounded-lg p-4">
                 <h4 className="font-sans font-bold text-sm mb-2">Delivery & Services</h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Free consultation & measurement</li>
-                  <li>• Nationwide delivery available</li>
-                  <li>• Professional installation service</li>
-                  <li>• 1 year warranty included</li>
+                  <li>• Free slab selection consultation</li>
+                  <li>• Kiln-dried & export-grade finishing</li>
+                  <li>• Worldwide shipping available</li>
+                  <li>• 1 year structural warranty</li>
                 </ul>
               </div>
             </div>

@@ -29,7 +29,7 @@ const Navbar = () => {
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <Link to="/" className="flex flex-col leading-tight">
           <span className="font-serif text-2xl lg:text-3xl font-bold tracking-tight">AYAHOMEPROJECT</span>
-          <span className="font-sans text-xs lg:text-sm tracking-[0.18em] text-muted-foreground">OFFICIAL SITE</span>
+          <span className="font-sans text-xs lg:text-sm tracking-[0.18em] text-muted-foreground">SUAR WOOD SPECIALIST</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">

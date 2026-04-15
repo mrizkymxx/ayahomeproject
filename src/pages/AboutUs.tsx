@@ -20,37 +20,37 @@ const timelineData = [
     date: "March 2021",
     title: "Founded",
     icon: HandMetal,
-    description: "Aya Home Project began in Jepara, Indonesia, where fine woodworking is a living tradition. From day one, we focused on handcrafted custom furniture with export-minded construction quality, clean finishing, and design that feels timeless in both homes and hospitality spaces.",
+    description: "Aya Home Project was established in Jepara, Indonesia — the heartland of Indonesian woodworking. From day one, we specialized in Suar (Trembesi) wood, sourcing premium slabs from sustainable plantations across Java and transforming them into live-edge masterpieces with export-grade finishing.",
   },
   {
     date: "July 2022",
-    title: "Expansion",
+    title: "First Export",
     icon: Flag,
-    description: "As demand increased, we expanded into larger B2B projects for villas, cafés, and boutique hotels. We strengthened production flow, quality control, and material standards to deliver consistent results that international clients can trust project after project.",
+    description: "Our first international shipment marked a major milestone. We began supplying live-edge Suar dining tables and bar tops to boutique hotels and restaurants in Australia, Japan, and Europe. Our reputation for consistent quality and reliable delivery grew rapidly in the global market.",
   },
   {
     date: "November 2023",
-    title: "Rebranding",
+    title: "Expansion",
     icon: RefreshCw,
-    description: "We rebranded as Aya Home Project to represent a broader design capability beyond solid wood: iron, stainless steel, upholstery, and HPL integration. The new identity marked our commitment to become a reliable custom furniture partner for architects, developers, and buyers across borders.",
+    description: "We expanded our workshop and upgraded to industrial kiln-drying facilities to meet growing international demand. Our product range broadened to include conference tables, reception desks, and custom hospitality furniture — all crafted from premium Suar wood with resin, metal, and mixed-material options.",
   },
   {
     date: "Today",
     title: "Present",
     icon: Store,
-    description: "Today, we serve residential and hospitality projects in Indonesia and abroad with custom sizing, design collaboration, and shipping support. With responsive communication and dependable craftsmanship, we help international clients source furniture that is beautiful, practical, and ready for real-world use.",
+    description: "Today, Aya Home Project serves clients across 15+ countries — from private homeowners seeking a statement dining table to five-star resorts furnishing entire properties with Suar wood. Every slab is hand-selected, kiln-dried, and finished to perfection in our Jepara workshop.",
   },
 ];
 
 const AboutUs = () => {
   useEffect(() => {
     applyPageSeoMeta({
-      title: "About Aya Home Project | Jepara Craftsmanship",
+      title: "About Aya Home Project | Suar Wood Specialists from Jepara",
       description:
-        "Discover Aya Home Project's story, craftsmanship roots in Jepara, and international-ready custom furniture capabilities.",
+        "Discover our journey as Indonesia's premier Suar (Trembesi) wood furniture studio. From Jepara to the world — handcrafted live-edge tables and custom wood furniture.",
       canonicalUrl: "https://ayahomeproject.com/about",
       imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
-      keywords: ["about Aya Home Project", "Jepara craftsmanship", "custom furniture workshop"],
+      keywords: ["about Aya Home Project", "Suar wood Jepara", "Trembesi furniture workshop", "live edge table maker"],
     });
   }, []);
 
@@ -98,12 +98,12 @@ const AboutUs = () => {
       <section className="section-container py-16 bg-secondary">
         <h2 className="font-serif text-5xl md:text-6xl text-center mb-4" data-aos="fade-up">Projects</h2>
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-          See how our furniture brings spaces to life across Indonesia
+          Our Suar wood installations bring warmth and character to spaces across the globe
         </p>
 
         <div className="mb-16" data-aos="fade-up" data-aos-delay="200">
           <h3 className="font-serif text-xl text-center mb-6 italic">
-            Our Products for Hotels & Cafés in Sumbawa, Indonesia
+            Suar Wood Installations for Hotels & Resorts
           </h3>
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
@@ -120,17 +120,17 @@ const AboutUs = () => {
           >
             <SwiperSlide>
               <div className="group overflow-hidden rounded-lg">
-                <img src={projectHosp01} alt="Hotel Project 1" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
+                <img src={projectHosp01} alt="Suar Wood Hotel Reception Desk" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
               </div>
             </SwiperSlide>
             <SwiperSlide>
               <div className="group overflow-hidden rounded-lg">
-                <img src={projectHosp02} alt="Hotel Project 2" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
+                <img src={projectHosp02} alt="Suar Wood Resort Dining Table" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
               </div>
             </SwiperSlide>
             <SwiperSlide>
               <div className="group overflow-hidden rounded-lg">
-                <img src={projectHosp03} alt="Hotel Project 3" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
+                <img src={projectHosp03} alt="Suar Wood Hotel Suite Furniture" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
               </div>
             </SwiperSlide>
           </Swiper>
@@ -138,7 +138,7 @@ const AboutUs = () => {
 
         <div data-aos="fade-up" data-aos-delay="300">
           <h3 className="font-serif text-xl text-center mb-6 italic">
-            Our Products for Sushi Restaurants in Uluwatu & Seminyak, Bali
+            Live-Edge Bar Tops & Tables for Restaurants Worldwide
           </h3>
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
@@ -155,17 +155,17 @@ const AboutUs = () => {
           >
             <SwiperSlide>
               <div className="group overflow-hidden rounded-lg">
-                <img src={projectRest01} alt="Restaurant Project 1" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
+                <img src={projectRest01} alt="Suar Wood Bar Counter" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
               </div>
             </SwiperSlide>
             <SwiperSlide>
               <div className="group overflow-hidden rounded-lg">
-                <img src={projectRest02} alt="Restaurant Project 2" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
+                <img src={projectRest02} alt="Suar Wood Restaurant Tables" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
               </div>
             </SwiperSlide>
             <SwiperSlide>
               <div className="group overflow-hidden rounded-lg">
-                <img src={projectRest03} alt="Restaurant Project 3" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
+                <img src={projectRest03} alt="Suar Wood Private Dining Table" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
               </div>
             </SwiperSlide>
           </Swiper>

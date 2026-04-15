@@ -13,12 +13,12 @@ const Contact = () => {
 
   useEffect(() => {
     applyPageSeoMeta({
-      title: "Contact Aya Home Project",
+      title: "Contact Aya Home Project | Suar Wood Inquiry",
       description:
-        "Contact Aya Home Project for custom furniture consultation, project inquiries, and international orders.",
+        "Contact Aya Home Project for premium Suar wood furniture consultation, custom slab selection, and international shipping inquiries.",
       canonicalUrl: "https://ayahomeproject.com/contact",
       imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
-      keywords: ["contact Aya Home Project", "furniture consultation", "international furniture inquiry"],
+      keywords: ["contact Aya Home Project", "suar wood inquiry", "custom slab order", "international furniture shipping"],
     });
   }, []);
 
@@ -44,7 +44,7 @@ const Contact = () => {
     } else {
       toast({
         title: "Message failed",
-        description: "We couldn’t submit your message right now. Please try again shortly.",
+        description: "We couldn't submit your message right now. Please try again shortly.",
         variant: "destructive",
       });
     }
@@ -59,7 +59,7 @@ const Contact = () => {
         <div className="text-center mb-12" data-aos="fade-up">
           <h1 className="font-serif text-5xl md:text-6xl font-bold mb-4">Get In Touch</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Have questions about our furniture? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            Interested in our Suar wood furniture? Whether you need a single statement dining table or bulk hospitality furniture, we'd love to hear from you.
           </p>
         </div>
 
@@ -69,7 +69,7 @@ const Contact = () => {
             <div className="inline-flex items-center justify-center w-12 h-12 bg-foreground text-background rounded-full mb-4">
               <MapPin size={24} />
             </div>
-            <h3 className="font-sans font-bold mb-2">Visit Our Office</h3>
+            <h3 className="font-sans font-bold mb-2">Visit Our Workshop</h3>
             <p className="text-sm text-muted-foreground">
               Sidomulyo Street, RT 5 RW 3<br />
               Langon Village, Tahunan District<br />
@@ -112,7 +112,7 @@ const Contact = () => {
           {/* Image & Info */}
           <div data-aos="fade-right">
             <div className="rounded-2xl overflow-hidden mb-6">
-              <img src={contactHero} alt="Contact Aya Home Project" className="w-full h-80 object-cover" width={600} height={400} />
+              <img src={contactHero} alt="Aya Home Project Suar Wood Workshop" className="w-full h-80 object-cover" width={600} height={400} />
             </div>
             
             <div className="bg-secondary p-6 rounded-xl">
@@ -120,11 +120,15 @@ const Contact = () => {
               <ul className="space-y-3 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <span className="text-foreground mt-0.5">✓</span>
-                  <span>Free consultation before ordering</span>
+                  <span>Free slab selection consultation with detailed photos</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-foreground mt-0.5">✓</span>
-                  <span>Dimension simulation via WhatsApp</span>
+                  <span>Custom dimensions, edge profiles & leg designs</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-foreground mt-0.5">✓</span>
+                  <span>Kiln-dried to 8-12% moisture content</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-foreground mt-0.5">✓</span>
@@ -132,19 +136,15 @@ const Contact = () => {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-foreground mt-0.5">✓</span>
-                  <span>Custom size & design</span>
+                  <span>International shipping — sea & air freight</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-foreground mt-0.5">✓</span>
-                  <span>Nationwide & international shipping</span>
+                  <span>1-Year structural warranty</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-foreground mt-0.5">✓</span>
-                  <span>1-Year Structural Warranty</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-foreground mt-0.5">✓</span>
-                  <span>Water-based & Oil finishing options</span>
+                  <span>Natural oil, lacquer & epoxy resin finishes</span>
                 </li>
               </ul>
               
@@ -256,7 +256,7 @@ const Contact = () => {
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     rows={4}
                     className="w-full px-4 py-3 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all resize-none"
-                    placeholder="Tell us about your project or inquiry..."
+                    placeholder="Tell us about your Suar wood project — dimensions, quantity, finish preferences..."
                   />
                 </div>
 

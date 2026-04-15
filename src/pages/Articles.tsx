@@ -14,13 +14,13 @@ const hardcodedArticles = [
   {
     id: 1,
     slug: "small-room-secrets",
-    title: "Secrets You Should Know For Those of You Who Have a Small Room",
+    title: "How to Choose the Perfect Suar Wood Slab for Your Dining Table",
     author: "Aya Home Project",
     date: "6 August 2025",
     published_at: "2025-08-06T10:00:00Z",
-    category: "Interior Tips",
+    category: "Buying Guide",
     read_time: "5 min read",
-    excerpt: "Discover expert tips and tricks to maximize your small room space. Learn how to make your compact living area feel spacious, organized, and stylish with smart furniture choices and clever design solutions.",
+    excerpt: "Selecting the right Suar slab is the most important step in creating your dream table. Learn how to evaluate grain patterns, moisture content, thickness, and live-edge profiles to find a slab that matches your space and style perfectly.",
     image: smallRoom,
     image_url: "/src/assets/generated/small-room.jpg",
     featured: true,
@@ -29,13 +29,13 @@ const hardcodedArticles = [
   {
     id: 2,
     slug: "wall-paint-furniture-finish",
-    title: "Wall Paint vs Furniture Finish Should They Match",
+    title: "Live-Edge vs Straight-Edge: Which Suar Finish Is Right for You?",
     author: "Aya Home Project",
     date: "7 August 2025",
     published_at: "2025-08-07T10:00:00Z",
     category: "Design Guide",
     read_time: "4 min read",
-    excerpt: "Explore the art of color coordination in interior design. Understand when to match and when to contrast your wall colors with furniture finishes for a harmonious living space.",
+    excerpt: "Explore the differences between live-edge and straight-edge Suar wood finishes. Understand when the natural bark edge adds character versus when a clean, refined edge suits your interior design better.",
     image: wallPaint,
     image_url: "/src/assets/generated/wall-paint.jpg",
     featured: false,
@@ -44,13 +44,13 @@ const hardcodedArticles = [
   {
     id: 3,
     slug: "moldy-furniture-solutions",
-    title: "Moldy Furniture? Find Out The Causes and How to Fix It!",
+    title: "Caring for Your Suar Wood Furniture: A Complete Maintenance Guide",
     author: "Aya Home Project",
     date: "8 August 2025",
     published_at: "2025-08-08T10:00:00Z",
     category: "Maintenance",
     read_time: "6 min read",
-    excerpt: "Learn the root causes of mold on furniture and effective solutions to prevent and treat it. Keep your furniture looking fresh and extend its lifespan with proper care techniques.",
+    excerpt: "Suar wood is naturally durable, but proper care extends its beauty for generations. Learn the best practices for cleaning, oiling, protecting against humidity, and restoring your Suar furniture's original lustre.",
     image: moldyFurniture,
     image_url: "/src/assets/generated/moldy-furniture.jpg",
     featured: false,
@@ -75,12 +75,12 @@ const Articles = () => {
 
   useEffect(() => {
     applyPageSeoMeta({
-      title: "Articles | Aya Home Project",
+      title: "Articles | Aya Home Project — Suar Wood Guides",
       description:
-        "Read Aya Home Project articles about interior tips, furniture care, and design guidance for homes and hospitality spaces.",
+        "Read Aya Home Project articles about Suar wood selection, live-edge table design, and furniture care guides for international buyers.",
       canonicalUrl: "https://ayahomeproject.com/articles",
       imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
-      keywords: ["furniture articles", "interior tips", "furniture maintenance", "Aya Home Project blog"],
+      keywords: ["suar wood guide", "live edge table tips", "trembesi wood care", "Aya Home Project blog"],
     });
   }, []);
 
@@ -159,9 +159,9 @@ const Articles = () => {
   return (
     <Layout>
       <section className="section-container py-16">
-        <h1 className="font-serif text-5xl md:text-6xl text-center mb-4" data-aos="fade-up">Study With Aya Home Project</h1>
+        <h1 className="font-serif text-5xl md:text-6xl text-center mb-4" data-aos="fade-up">Suar Wood Knowledge</h1>
         <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-          Expert tips, design inspiration, and maintenance guides for your furniture
+          Expert guides on Suar wood selection, live-edge design, finishing techniques, and furniture maintenance
         </p>
 
         {/* Featured Article */}

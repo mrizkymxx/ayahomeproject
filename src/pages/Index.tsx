@@ -34,20 +34,20 @@ const Index = () => {
   const { toast } = useToast();
   const [isCatalogSubmitting, setIsCatalogSubmitting] = useState(false);
   const fallbackHomeProducts: HomeProduct[] = [
-    { id: "afra-chair", name: "Afra Chair", slug: "afra-chair", img: afraChair },
-    { id: "yola-chair", name: "Yola Chair", slug: "yola-chair", img: yolaChair },
-    { id: "landa-chair", name: "Landa Chair", slug: "landa-chair", img: landaChair },
+    { id: "afra-chair", name: "Suar Dining Table", slug: "afra-chair", img: afraChair },
+    { id: "yola-chair", name: "Suar Coffee Table", slug: "yola-chair", img: yolaChair },
+    { id: "landa-chair", name: "Suar Console Table", slug: "landa-chair", img: landaChair },
   ];
   const [homeProducts, setHomeProducts] = useState<HomeProduct[]>(fallbackHomeProducts);
 
   useEffect(() => {
     applyPageSeoMeta({
-      title: "Aya Home Project | Custom Furniture Indonesia",
+      title: "Aya Home Project | Premium Suar Wood Furniture Indonesia",
       description:
-        "Custom furniture from Jepara for homes, cafes, restaurants, hotels, and hospitality projects worldwide.",
+        "Premium live-edge Suar (Trembesi) wood furniture handcrafted in Jepara, Indonesia. Custom dining tables, coffee tables, and bar tops for homes, hotels, and restaurants worldwide.",
       canonicalUrl: "https://ayahomeproject.com/",
       imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
-      keywords: ["custom furniture", "Jepara furniture", "furniture Indonesia", "Aya Home Project"],
+      keywords: ["suar wood furniture", "trembesi wood", "live edge table", "monkey pod wood", "Jepara furniture", "Aya Home Project"],
     });
   }, []);
 
@@ -92,17 +92,17 @@ const Index = () => {
     {
       image: heroSlide01,
       title: "Aya Home Project",
-      subtitle: "Custom Furniture for Homes, Cafes, Hotels, and Global Projects"
+      subtitle: "Premium Suar & Trembesi Wood Furniture for the World"
     },
     {
       image: heroSlide02,
-      title: "Premium Quality",
-      subtitle: "Handcrafted with Passion & Precision"
+      title: "Live-Edge Masterpieces",
+      subtitle: "Each Slab Tells a Unique Story of Nature"
     },
     {
       image: heroSlide03,
-      title: "Custom Designs",
-      subtitle: "Tailored to Your Unique Style"
+      title: "Crafted in Jepara",
+      subtitle: "Exported to Homes, Hotels & Restaurants Worldwide"
     }
   ];
 
@@ -133,7 +133,7 @@ const Index = () => {
     } else {
       toast({
         title: "Request failed",
-        description: "We couldn’t submit your request right now. Please try again in a moment.",
+        description: "We couldn't submit your request right now. Please try again in a moment.",
         variant: "destructive",
       });
     }
@@ -187,10 +187,10 @@ const Index = () => {
       <section className="section-container py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
-            { icon: ShieldCheck, title: "Guarantee Product", desc: "1 year warranty on all furniture with comprehensive after-sales service." },
-            { icon: Palette, title: "Custom Design", desc: "Every piece is fully customizable to match your unique style and needs." },
-            { icon: Handshake, title: "Business to Business", desc: "Trusted partner for restaurants, hotels, and cafes worldwide." },
-            { icon: MessageSquare, title: "Free Consultation", desc: "Expert advice to help you find the perfect furniture solutions." },
+            { icon: ShieldCheck, title: "Guaranteed Quality", desc: "Every Suar slab is kiln-dried, treated, and finished to international export standards with a 1-year warranty." },
+            { icon: Palette, title: "Custom Live-Edge", desc: "Choose your slab, edge profile, finish, and leg design. Every piece is one-of-a-kind, crafted to your vision." },
+            { icon: Handshake, title: "B2B & Hospitality", desc: "Trusted partner for hotels, restaurants, resorts, and interior designers across 15+ countries." },
+            { icon: MessageSquare, title: "Free Consultation", desc: "Expert advice on Suar wood selection, dimensions, finishes, and international shipping logistics." },
           ].map((feature) => (
             <div 
               key={feature.title} 
@@ -209,9 +209,9 @@ const Index = () => {
 
       {/* Featured Products */}
       <section className="section-container py-16">
-        <h2 className="font-serif text-4xl md:text-5xl text-center mb-4" data-aos="fade-up">Our Products</h2>
+        <h2 className="font-serif text-4xl md:text-5xl text-center mb-4" data-aos="fade-up">Our Suar Collection</h2>
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-          Handcrafted furniture made from premium materials, designed for comfort and elegance.
+          Handcrafted live-edge Suar wood furniture, each piece showcasing the unique beauty of Trembesi grain.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {homeProducts.map((product, index) => (
@@ -242,7 +242,7 @@ const Index = () => {
             <div>
               <h2 className="font-serif text-4xl md:text-5xl mb-6">Our Journey</h2>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                Aya Home Project is a custom furniture studio from Jepara, Indonesia. We build premium pieces for homes and hospitality businesses with flexible design, detailed craftsmanship, and global-ready quality.
+                Aya Home Project specializes in premium Suar (Trembesi) wood furniture from Jepara, Indonesia. We source the finest Suar slabs and transform them into stunning live-edge dining tables, coffee tables, bar tops, and statement pieces for homes and hospitality projects worldwide.
               </p>
               
               {/* Request Catalog Form */}
@@ -305,13 +305,13 @@ const Index = () => {
                 className="projects-swiper"
               >
                 <SwiperSlide>
-                  <img src={catalogImg01} alt="Aya Home Project Catalog 1" className="w-full h-80 object-cover rounded-2xl" loading="lazy" width={800} height={600} />
+                  <img src={catalogImg01} alt="Suar Wood Catalog Preview 1" className="w-full h-80 object-cover rounded-2xl" loading="lazy" width={800} height={600} />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <img src={catalogImg02} alt="Aya Home Project Catalog 2" className="w-full h-80 object-cover rounded-2xl" loading="lazy" width={800} height={600} />
+                  <img src={catalogImg02} alt="Suar Wood Catalog Preview 2" className="w-full h-80 object-cover rounded-2xl" loading="lazy" width={800} height={600} />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <img src={catalogImg03} alt="Aya Home Project Catalog 3" className="w-full h-80 object-cover rounded-2xl" loading="lazy" width={800} height={600} />
+                  <img src={catalogImg03} alt="Suar Wood Catalog Preview 3" className="w-full h-80 object-cover rounded-2xl" loading="lazy" width={800} height={600} />
                 </SwiperSlide>
               </Swiper>
             </div>
@@ -325,18 +325,18 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             {
-              title: "Customizable",
-              desc: "Every design is fully customizable to reflect your style and personality.",
+              title: "Solid Suar Wood",
+              desc: "Every piece is crafted from genuine Suar (Trembesi / Monkey Pod) wood — kiln-dried and finished to perfection.",
               icon: Palette,
             },
             {
-              title: "Premium Quality",
-              desc: "Made from premium materials, crafted with precision for lasting value.",
+              title: "Export-Grade Quality",
+              desc: "Built to international standards with premium finishes, ready for worldwide shipping via sea or air freight.",
               icon: Handshake,
             },
             {
               title: "Guarantee 1 Year",
-              desc: "We provide guarantee and after-sales service for your peace of mind.",
+              desc: "We provide a structural warranty and responsive after-sales support for your complete peace of mind.",
               icon: ShieldCheck,
             },
           ].map((item, index) => (
@@ -358,13 +358,13 @@ const Index = () => {
       {/* Best Seller Section */}
       <section className="bg-secondary py-16">
         <div className="section-container">
-          <h2 className="font-serif text-4xl md:text-5xl text-center mb-12" data-aos="fade-up">Aya Home Project Best Seller</h2>
+          <h2 className="font-serif text-4xl md:text-5xl text-center mb-12" data-aos="fade-up">Best Seller Collection</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { img: afraChair, name: "Afra Chair" },
-              { img: yolaChair, name: "Yola Chair" },
-              { img: landaChair, name: "Landa Chair" },
-              { img: briliyChair, name: "Briliy Chair" },
+              { img: afraChair, name: "Suar Dining Table" },
+              { img: yolaChair, name: "Suar Coffee Table" },
+              { img: landaChair, name: "Suar Console Table" },
+              { img: briliyChair, name: "Suar Bar Top" },
             ].map((product, index) => (
               <Link 
                 to="/products" 

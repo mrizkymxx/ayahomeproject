@@ -13,19 +13,19 @@ import yantamChair from "@/assets/products/yantam-chair.jpg";
 import gunawChair from "@/assets/products/gunaw-chair.jpg";
 
 // Fallback hardcoded data
-const hardcodedCategories = ["Bed", "Sofas", "Table", "Chair", "Dining Set", "Coffee Table"];
+const hardcodedCategories = ["Dining Table", "Coffee Table", "Console Table", "Bar Top", "Bench", "Conference Table"];
 const hardcodedProducts = [
-  { id: "afra-chair", name: "Afra Chair", category: "Chair", slug: "afra-chair", image: afraChair },
-  { id: "yola-chair", name: "Yola Chair", category: "Chair", slug: "yola-chair", image: yolaChair },
-  { id: "landa-chair", name: "Landa Chair", category: "Chair", slug: "landa-chair", image: landaChair },
-  { id: "briliy-chair", name: "Briliy Chair", category: "Chair", slug: "briliy-chair", image: briliyChair },
-  { id: "yantam-chair", name: "Yantam Chair", category: "Chair", slug: "yantam-chair", image: yantamChair },
-  { id: "gunaw-chair", name: "Gunaw Chair", category: "Chair", slug: "gunaw-chair", image: gunawChair },
+  { id: "afra-chair", name: "Suar Live-Edge Dining Table", category: "Dining Table", slug: "afra-chair", image: afraChair },
+  { id: "yola-chair", name: "Suar Round Coffee Table", category: "Coffee Table", slug: "yola-chair", image: yolaChair },
+  { id: "landa-chair", name: "Suar Console Table", category: "Console Table", slug: "landa-chair", image: landaChair },
+  { id: "briliy-chair", name: "Suar Bar Top Counter", category: "Bar Top", slug: "briliy-chair", image: briliyChair },
+  { id: "yantam-chair", name: "Suar Garden Bench", category: "Bench", slug: "yantam-chair", image: yantamChair },
+  { id: "gunaw-chair", name: "Suar Conference Table", category: "Conference Table", slug: "gunaw-chair", image: gunawChair },
 ];
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeCategory = searchParams.get("category") || "Chair";
+  const activeCategory = searchParams.get("category") || "Dining Table";
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("name");
   const [categorySearch, setCategorySearch] = useState("");
@@ -38,12 +38,12 @@ const Products = () => {
 
   useEffect(() => {
     applyPageSeoMeta({
-      title: "Products | Aya Home Project",
+      title: "Suar Wood Products | Aya Home Project",
       description:
-        "Browse Aya Home Project products: handcrafted chairs and custom furniture for residential and hospitality spaces.",
+        "Browse our collection of premium Suar (Trembesi) wood furniture: live-edge dining tables, coffee tables, bar tops, console tables, and custom pieces for homes and hospitality.",
       canonicalUrl: "https://ayahomeproject.com/products",
       imageUrl: "https://ayahomeproject.com/og-ayahomeproject.jpg",
-      keywords: ["furniture products", "custom chairs", "hospitality furniture", "Aya Home Project"],
+      keywords: ["suar wood table", "live edge dining table", "trembesi furniture", "monkey pod wood", "Aya Home Project"],
     });
   }, []);
 
@@ -153,9 +153,9 @@ const Products = () => {
       {/* Hero */}
       <section className="section-container py-6">
         <div className="hero-banner h-[300px]">
-          <img src={productsHero} alt="Products" className="w-full h-full object-cover rounded-2xl" width={1200} height={600} />
+          <img src={productsHero} alt="Suar Wood Collection" className="w-full h-full object-cover rounded-2xl" width={1200} height={600} />
           <div className="hero-overlay rounded-2xl">
-            <h1 className="font-serif text-5xl md:text-6xl text-primary-foreground font-bold">Products</h1>
+            <h1 className="font-serif text-5xl md:text-6xl text-primary-foreground font-bold">Suar Wood Collection</h1>
           </div>
         </div>
       </section>
@@ -168,7 +168,7 @@ const Products = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder="Search Suar wood products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
@@ -248,8 +248,8 @@ const Products = () => {
 
             {/* Contact CTA */}
             <div className="mt-6 p-4 bg-secondary rounded-lg">
-              <p className="text-sm font-sans font-bold mb-2">Need Custom Furniture?</p>
-              <p className="text-xs text-muted-foreground mb-3">Contact us for custom orders and bulk purchases.</p>
+              <p className="text-sm font-sans font-bold mb-2">Need a Custom Slab?</p>
+              <p className="text-xs text-muted-foreground mb-3">Contact us for custom Suar wood slabs, special dimensions, and bulk orders.</p>
               <Link 
                 to="/contact" 
                 className="text-xs font-bold text-destructive hover:underline"
