@@ -25,7 +25,8 @@ const hardcodedProducts = [
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeCategory = searchParams.get("category") || "Dining Table";
+  const categoryParam = searchParams.get("category");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("name");
   const [categorySearch, setCategorySearch] = useState("");
@@ -93,10 +94,20 @@ const Products = () => {
     fetchData();
   }, []);
 
+  // Set activeCategory based on URL param or default
+  useEffect(() => {
+    if (categoryParam) {
+      setActiveCategory(categoryParam);
+    } else {
+      // Default to "All Products"
+      setActiveCategory(null);
+    }
+  }, [categoryParam]);
+
   // Get active category object
-  const activeCategoryObj = categories.find(c => 
+  const activeCategoryObj = activeCategory ? categories.find(c => 
     (c.name === activeCategory) || (c.slug === activeCategory.toLowerCase().replace(' ', '-'))
-  );
+  ) : null;
 
   // Get product count per category
   const categoryCounts = categories.reduce((acc, cat) => {
@@ -115,13 +126,15 @@ const Products = () => {
     cat.name.toLowerCase().includes(categorySearch.toLowerCase())
   );
 
-  // Filter products by active category
-  let filteredProducts = products.filter((p) => {
-    if (usingFallback) {
-      return p.category === activeCategory;
-    }
-    return p.category?.name === activeCategory;
-  });
+  // Filter products by active category (null = All Products)
+  let filteredProducts = activeCategory 
+    ? products.filter((p) => {
+        if (usingFallback) {
+          return p.category === activeCategory;
+        }
+        return p.category?.name === activeCategory;
+      })
+    : products; // Show all products if no category selected
 
   // Search filter
   if (searchTerm) {
@@ -178,10 +191,17 @@ const Products = () => {
           {/* Mobile Category Dropdown */}
           <div className="w-full md:hidden">
             <select
-              value={activeCategory}
-              onChange={(e) => setSearchParams({ category: e.target.value })}
+              value={activeCategory || ""}
+              onChange={(e) => {
+                if (e.target.value) {
+                  setSearchParams({ category: e.target.value });
+                } else {
+                  setSearchParams({});
+                }
+              }}
               className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring font-sans"
             >
+              <option value="">All Products ({products.length})</option>
               {categories.map((cat) => (
                 <option key={cat.name} value={cat.name}>
                   {cat.name} ({categoryCounts[cat.name] || 0})
@@ -224,6 +244,21 @@ const Products = () => {
 
             {/* Scrollable Category List */}
             <div className={`space-y-2 ${categories.length > 10 ? 'max-h-96 overflow-y-auto pr-2 scrollbar-thin' : ''}`}>
+              {/* All Products Button */}
+              <button
+                onClick={() => setSearchParams({})}
+                className={`text-sm font-sans transition-all w-full text-left px-3 py-2 rounded-lg flex items-center justify-between group ${
+                  activeCategory === null
+                    ? "bg-foreground text-background font-bold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                }`}
+              >
+                <span>All Products</span>
+                <span className={`text-xs ${activeCategory === null ? 'text-background/70' : 'text-muted-foreground'}`}>
+                  {products.length}
+                </span>
+              </button>
+
               {filteredCategories.length === 0 ? (
                 <p className="text-sm text-muted-foreground italic">No categories found</p>
               ) : (
@@ -268,19 +303,39 @@ const Products = () => {
               </div>
             ) : filteredProducts.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-muted-foreground text-lg mb-2">No products found</p>
-                <p className="text-sm text-muted-foreground">Try adjusting your search or filters</p>
+                <div className="mb-4">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary">
+                    <Search size={32} className="text-muted-foreground" />
+                  </div>
+                </div>
+                <p className="text-foreground font-semibold text-lg mb-2">No products found</p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {searchTerm ? "Try adjusting your search term or " : ""}{activeCategory ? "try a different category or " : ""}browse all products
+                </p>
+                <button
+                  onClick={() => {
+                    setSearchTerm("");
+                    setSearchParams({});
+                  }}
+                  className="text-sm font-bold text-foreground hover:text-destructive transition-colors"
+                >
+                  View All Products →
+                </button>
               </div>
             ) : (
               <>
-                <div className="mb-4 text-sm text-muted-foreground">
-                  Showing {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''}
-                  {usingFallback && <span className="ml-2 text-yellow-600">⚠️ Using cached data</span>}
+                <div className="mb-6 flex items-center justify-between">
+                  <p className="text-sm text-muted-foreground">
+                    Showing {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''}
+                    {usingFallback && <span className="ml-2 text-yellow-600">⚠️ Using cached data</span>}
+                  </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredProducts.map((product, index) => {
                     const productImage = usingFallback ? product.image : (product.images?.[0] || afraChair);
                     const productSlug = product.slug || product.id;
+                    const isFeatured = product.is_featured;
+                    const isBestSeller = product.is_best_seller;
                     
                     return (
                       <Link
@@ -290,8 +345,9 @@ const Products = () => {
                         data-aos="fade-up"
                         data-aos-delay={index * 50}
                       >
-                        <div className="bg-background border border-border rounded-xl overflow-hidden hover:border-foreground transition-all duration-300 hover:shadow-xl">
-                          <div className="aspect-square flex items-center justify-center p-6 bg-secondary group-hover:bg-background transition-colors">
+                        <div className="bg-background border border-border rounded-xl overflow-hidden hover:border-foreground transition-all duration-300 hover:shadow-2xl h-full flex flex-col">
+                          {/* Image Container with Badges */}
+                          <div className="aspect-square flex items-center justify-center p-6 bg-secondary group-hover:bg-background transition-colors relative overflow-hidden">
                             <img
                               src={productImage}
                               alt={product.name}
@@ -300,15 +356,31 @@ const Products = () => {
                               width={400}
                               height={400}
                             />
+                            
+                            {/* Badges */}
+                            <div className="absolute top-3 right-3 flex gap-2 flex-wrap justify-end">
+                              {isBestSeller && (
+                                <span className="inline-block px-2 py-1 rounded-full text-xs font-bold bg-orange-500 text-white animate-pulse">
+                                  🔥 Best Seller
+                                </span>
+                              )}
+                              {isFeatured && (
+                                <span className="inline-block px-2 py-1 rounded-full text-xs font-bold bg-purple-500 text-white">
+                                  ⭐ Featured
+                                </span>
+                              )}
+                            </div>
                           </div>
-                          <div className="p-4">
-                            <p className="font-serif text-lg italic mb-2">{product.name}</p>
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs text-muted-foreground">
-                                {usingFallback ? product.category : product.category?.name}
+                          
+                          {/* Content */}
+                          <div className="p-4 flex-1 flex flex-col">
+                            <p className="font-serif text-lg italic mb-2 line-clamp-2 flex-1">{product.name}</p>
+                            <div className="flex items-center justify-between mt-2 pt-3 border-t border-border/50">
+                              <span className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                                {usingFallback ? product.category : product.category?.name || "Uncategorized"}
                               </span>
                               <span className="text-xs font-bold text-foreground group-hover:text-destructive transition-colors">
-                                View Details →
+                                View →
                               </span>
                             </div>
                           </div>
