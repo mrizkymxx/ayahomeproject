@@ -47,7 +47,6 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
