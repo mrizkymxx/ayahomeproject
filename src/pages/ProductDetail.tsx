@@ -47,6 +47,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [canShare] = useState(() => typeof navigator !== 'undefined' && !!navigator.share);
 
   useEffect(() => {
     async function fetchData() {
@@ -128,6 +129,31 @@ const ProductDetail = () => {
       description: "Product link has been copied to clipboard.",
     });
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleNativeShare = async () => {
+    if (!product || !navigator.share) return;
+
+    try {
+      await navigator.share({
+        title: product.name,
+        text: `Check out this premium Suar wood furniture from Aya Home Project!`,
+        url: window.location.href,
+      });
+      toast({
+        title: "Shared!",
+        description: "Product shared successfully.",
+      });
+    } catch (error: any) {
+      // User cancelled share or error occurred - silently handle
+      if (error.name !== 'AbortError') {
+        toast({
+          variant: "destructive",
+          title: "Share failed",
+          description: "Could not share product. Please try again.",
+        });
+      }
+    }
   };
 
   const handleShare = (platform: "whatsapp" | "instagram" | "threads" | "tiktok" | "x") => {
@@ -278,6 +304,18 @@ const ProductDetail = () => {
             <div className="mb-8 pb-8 border-b border-border/30">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Share this product</p>
               <div className="flex items-center gap-3 flex-wrap">
+                {/* Native Share Button (iPhone/Android style) */}
+                {canShare && (
+                  <button
+                    onClick={handleNativeShare}
+                    className="flex-1 md:flex-none px-4 py-2.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 border border-blue-300/50 hover:border-blue-400 text-blue-700 rounded-lg transition-all flex items-center justify-center gap-2 group font-semibold"
+                    title="Share using system share sheet"
+                  >
+                    <Share2 size={18} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-sm font-medium">Share</span>
+                  </button>
+                )}
+
                 {/* WhatsApp Share */}
                 <button 
                   onClick={() => handleShare("whatsapp")}
