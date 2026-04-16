@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { Plus, Edit, Trash2, Loader2, Upload, X } from "lucide-react";
+import { Plus, Edit, Trash2, Loader2, Upload, X, FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   appendInternalProductLinks,
@@ -314,24 +314,39 @@ const AdminArticles = () => {
   const categoryOptions = articleCategories.length ? articleCategories : ["Interior Tips"];
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="font-serif text-2xl">Articles</h2>
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div>
+          <h1 className="font-serif text-3xl md:text-4xl font-bold mb-2">Articles</h1>
+          <p className="text-muted-foreground">Manage your blog content ({articles.length} article{articles.length !== 1 ? 's' : ''})</p>
+        </div>
         <button
           onClick={() => {
             setShowForm(true);
             setEditing(null);
             setForm(buildEmptyForm(defaultCategoryName));
           }}
-          className="flex items-center gap-2 px-4 py-2 bg-foreground text-background text-sm rounded-lg hover:opacity-90 transition-opacity"
+          className="flex items-center justify-center md:justify-start gap-2 px-6 py-3 bg-foreground text-background rounded-lg hover:bg-foreground/90 transition-all font-medium self-start md:self-auto"
         >
-          <Plus size={16} /> Add Article
+          <Plus size={20} />
+          Add Article
         </button>
       </div>
 
+      {/* Add/Edit Form */}
       {showForm && (
-        <div className="bg-background border border-border rounded-xl p-6 mb-6">
-          <h3 className="font-sans font-semibold mb-4">{editing ? "Edit Article" : "Add Article"}</h3>
+        <div className="bg-background border border-border rounded-xl p-6 md:p-8 mb-8 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-serif text-2xl font-bold">{editing ? "Edit Article" : "Add New Article"}</h2>
+            <button
+              onClick={() => setShowForm(false)}
+              className="p-2 hover:bg-muted rounded-lg transition-colors"
+              aria-label="Close form"
+            >
+              <X size={20} />
+            </button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               placeholder="Title"
@@ -436,21 +451,21 @@ const AdminArticles = () => {
               </div>
             </div>
           </div>
-          <div className="flex gap-3 mt-4">
+          <div className="flex gap-3 mt-6 pt-6 border-t border-border/30">
             <button
               onClick={() => void handleSave()}
               disabled={saving}
-              className="px-4 py-2 bg-foreground text-background text-sm rounded-lg disabled:opacity-60 inline-flex items-center gap-2"
+              className="flex items-center gap-2 px-6 py-2 bg-foreground text-background font-medium rounded-lg hover:bg-foreground/90 transition-all disabled:opacity-50"
             >
-              {saving && <Loader2 size={14} className="animate-spin" />}
-              Save
+              {saving && <Loader2 size={16} className="animate-spin" />}
+              {saving ? "Saving..." : "Save Article"}
             </button>
             <button
               onClick={() => {
                 setShowForm(false);
                 setEditing(null);
               }}
-              className="px-4 py-2 border border-border text-sm rounded-lg"
+              className="px-6 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
             >
               Cancel
             </button>
@@ -458,55 +473,110 @@ const AdminArticles = () => {
         </div>
       )}
 
-      <div className="bg-background border border-border rounded-xl overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-muted">
-            <tr>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Title</th>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Category</th>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Slug</th>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Author</th>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Date</th>
-              <th className="text-right px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(loading ? [] : articles).map((article) => (
-              <tr key={article.id} className="border-t border-border">
-                <td className="px-6 py-4 text-sm font-medium max-w-[250px] truncate">{article.title}</td>
-                <td className="px-6 py-4 text-sm text-muted-foreground">{article.category}</td>
-                <td className="px-6 py-4 text-xs text-muted-foreground">{article.slug}</td>
-                <td className="px-6 py-4 text-sm text-muted-foreground">{article.author}</td>
-                <td className="px-6 py-4 text-sm text-muted-foreground">
-                  {article.published_at ? new Date(article.published_at).toLocaleDateString() : "-"}
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <button onClick={() => handleEdit(article)} className="p-1 hover:bg-muted rounded mr-2">
-                    <Edit size={16} />
-                  </button>
-                  <button onClick={() => handleDelete(article.id)} className="p-1 hover:bg-muted rounded text-destructive">
-                    <Trash2 size={16} />
-                  </button>
-                </td>
-              </tr>
+      {/* Articles List */}
+      {loading ? (
+        <div className="bg-background border border-border rounded-xl p-8 md:p-12 text-center">
+          <Loader2 size={40} className="mx-auto text-muted-foreground mb-4 animate-spin" />
+          <p className="text-muted-foreground font-medium">Loading articles...</p>
+        </div>
+      ) : articles.length === 0 ? (
+        <div className="bg-background border border-border rounded-xl p-8 md:p-12 text-center">
+          <FileText size={48} className="mx-auto text-muted-foreground mb-4 opacity-50" />
+          <p className="text-foreground font-semibold mb-1">No articles yet</p>
+          <p className="text-sm text-muted-foreground">Click "Add Article" to publish your first post</p>
+        </div>
+      ) : (
+        <>
+          {/* Desktop Table View */}
+          <div className="hidden md:block bg-background border border-border rounded-xl overflow-hidden shadow-sm">
+            <table className="w-full">
+              <thead className="bg-muted border-b border-border">
+                <tr>
+                  <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Title</th>
+                  <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Category</th>
+                  <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Author</th>
+                  <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Date</th>
+                  <th className="text-right px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {articles.map((article, idx) => (
+                  <tr key={article.id} className={`border-t border-border hover:bg-muted/50 transition-colors ${idx % 2 === 0 ? "bg-background/50" : ""}`}>
+                    <td className="px-6 py-4">
+                      <div className="font-medium text-foreground truncate">{article.title}</div>
+                      <div className="text-xs text-muted-foreground mt-1">{article.slug}</div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-muted-foreground">{article.category}</td>
+                    <td className="px-6 py-4 text-sm text-muted-foreground">{article.author}</td>
+                    <td className="px-6 py-4 text-sm text-muted-foreground whitespace-nowrap">
+                      {article.published_at ? new Date(article.published_at).toLocaleDateString() : "-"}
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button onClick={() => handleEdit(article)} className="p-2 hover:bg-muted rounded-lg transition-colors" title="Edit article">
+                          <Edit size={18} />
+                        </button>
+                        <button onClick={() => handleDelete(article.id)} className="p-2 hover:bg-destructive/10 rounded-lg transition-colors text-destructive" title="Delete article">
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3">
+            {articles.map((article) => (
+              <div key={article.id} className="bg-background border border-border rounded-xl p-4 space-y-3 shadow-sm">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-foreground line-clamp-2">{article.title}</h3>
+                    <p className="text-xs text-muted-foreground mt-1">{article.slug}</p>
+                  </div>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => handleEdit(article)}
+                      className="p-2 hover:bg-muted rounded-lg transition-colors"
+                      title="Edit"
+                    >
+                      <Edit size={16} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(article.id)}
+                      className="p-2 hover:bg-destructive/10 rounded-lg transition-colors text-destructive"
+                      title="Delete"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2 text-sm border-t border-border/30 pt-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Category</p>
+                      <p className="text-foreground">{article.category}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Author</p>
+                      <p className="text-foreground text-sm">{article.author}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Published</p>
+                    <p className="text-foreground text-sm">
+                      {article.published_at ? new Date(article.published_at).toLocaleDateString() : "-"}
+                    </p>
+                  </div>
+                </div>
+              </div>
             ))}
-            {!loading && articles.length === 0 && (
-              <tr>
-                <td colSpan={6} className="px-6 py-8 text-center text-sm text-muted-foreground">
-                  No articles yet.
-                </td>
-              </tr>
-            )}
-            {loading && (
-              <tr>
-                <td colSpan={6} className="px-6 py-8 text-center text-sm text-muted-foreground">
-                  Loading articles...
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

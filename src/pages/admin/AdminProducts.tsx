@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { Plus, Edit, Trash2, Loader2, Upload, X } from "lucide-react";
+import { Plus, Edit, Trash2, Loader2, Upload, X, Package } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { slugify } from "@/lib/seo";
 import { extractStoragePathFromPublicUrl, uploadMultipleImages } from "@/lib/storage";
@@ -348,20 +348,35 @@ const AdminProducts = () => {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="font-serif text-2xl">Products</h2>
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div>
+          <h1 className="font-serif text-3xl md:text-4xl font-bold mb-2">Products</h1>
+          <p className="text-muted-foreground">Manage your {products.length} product(s)</p>
+        </div>
         <button
           onClick={handleNew}
-          className="flex items-center gap-2 px-4 py-2 bg-foreground text-background text-sm rounded-lg hover:opacity-90 transition-opacity"
+          className="flex items-center justify-center md:justify-start gap-2 px-6 py-3 bg-foreground text-background rounded-lg hover:bg-foreground/90 transition-all font-medium self-start md:self-auto"
         >
-          <Plus size={16} /> Add Product
+          <Plus size={20} />
+          Add Product
         </button>
       </div>
 
+      {/* Add/Edit Form */}
       {showForm && (
-        <div className="bg-background border border-border rounded-xl p-6 mb-6">
-          <h3 className="font-sans font-semibold mb-4">{editing ? "Edit Product" : "Add Product"}</h3>
+        <div className="bg-background border border-border rounded-xl p-6 md:p-8 mb-8 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-serif text-2xl font-bold">{editing ? "Edit Product" : "Add New Product"}</h2>
+            <button
+              onClick={() => setShowForm(false)}
+              className="p-2 hover:bg-muted rounded-lg transition-colors"
+              aria-label="Close form"
+            >
+              <X size={20} />
+            </button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               placeholder="Product Name"
@@ -478,21 +493,21 @@ const AdminProducts = () => {
               Best Seller
             </label>
           </div>
-          <div className="flex gap-3 mt-4">
+          <div className="flex gap-3 mt-6 pt-6 border-t border-border/30">
             <button
               onClick={handleSave}
               disabled={saving}
-              className="px-4 py-2 bg-foreground text-background text-sm rounded-lg disabled:opacity-60 inline-flex items-center gap-2"
+              className="flex items-center gap-2 px-6 py-2 bg-foreground text-background font-medium rounded-lg hover:bg-foreground/90 transition-all disabled:opacity-50"
             >
-              {saving && <Loader2 size={14} className="animate-spin" />}
-              Save
+              {saving && <Loader2 size={16} className="animate-spin" />}
+              {saving ? "Saving..." : "Save Product"}
             </button>
             <button
               onClick={() => {
                 setShowForm(false);
                 setEditing(null);
               }}
-              className="px-4 py-2 border border-border text-sm rounded-lg"
+              className="px-6 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
             >
               Cancel
             </button>
@@ -500,93 +515,140 @@ const AdminProducts = () => {
         </div>
       )}
 
-      <div className="bg-background border border-border rounded-xl overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-muted">
-            <tr>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Name</th>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Slug</th>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Category</th>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Flags</th>
-              <th className="text-right px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td className="px-6 py-8 text-center text-sm text-muted-foreground" colSpan={5}>
-                  Loading products...
-                </td>
-              </tr>
-            ) : (
-              products.map((product) => (
-                <tr key={product.id} className="border-t border-border">
-                  <td className="px-6 py-4 text-sm font-medium">{product.name}</td>
-                  <td className="px-6 py-4 text-xs text-muted-foreground">{product.slug}</td>
-                  <td className="px-6 py-4 text-sm text-muted-foreground">{categoryNameById.get(product.category_id || "") || "-"}</td>
-                  <td className="px-6 py-4 text-xs text-muted-foreground">
-                    {product.is_featured ? "featured " : ""}
-                    {product.is_best_seller ? "best-seller" : ""}
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <button onClick={() => handleEdit(product)} className="p-1 hover:bg-muted rounded mr-2">
+      {/* Products List */}
+      {loading ? (
+        <div className="bg-background border border-border rounded-xl p-8 md:p-12 text-center">
+          <Loader2 size={40} className="mx-auto text-muted-foreground mb-4 animate-spin" />
+          <p className="text-muted-foreground font-medium">Loading products...</p>
+        </div>
+      ) : products.length === 0 ? (
+        <div className="bg-background border border-border rounded-xl p-8 md:p-12 text-center">
+          <Package size={48} className="mx-auto text-muted-foreground mb-4 opacity-50" />
+          <p className="text-foreground font-semibold mb-1">No products yet</p>
+          <p className="text-sm text-muted-foreground">Click "Add Product" to create your first product</p>
+        </div>
+      ) : (
+        <>
+          {/* Desktop Table View */}
+          <div className="hidden md:block bg-background border border-border rounded-xl overflow-hidden shadow-sm">
+            <table className="w-full">
+              <thead className="bg-muted border-b border-border">
+                <tr>
+                  <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Name</th>
+                  <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Category</th>
+                  <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Flags</th>
+                  <th className="text-right px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((product, idx) => (
+                  <tr key={product.id} className={`border-t border-border hover:bg-muted/50 transition-colors ${idx % 2 === 0 ? "bg-background/50" : ""}`}>
+                    <td className="px-6 py-4">
+                      <div className="font-medium text-foreground">{product.name}</div>
+                      <div className="text-xs text-muted-foreground mt-1">{product.slug}</div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-muted-foreground">
+                      {categoryNameById.get(product.category_id || "") || "-"}
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      <div className="flex gap-2 flex-wrap">
+                        {product.is_featured && (
+                          <span className="inline-block px-2 py-1 rounded-full text-xs bg-purple-100/80 text-purple-800 dark:bg-purple-950/50 dark:text-purple-300 font-medium">
+                            ⭐ Featured
+                          </span>
+                        )}
+                        {product.is_best_seller && (
+                          <span className="inline-block px-2 py-1 rounded-full text-xs bg-orange-100/80 text-orange-800 dark:bg-orange-950/50 dark:text-orange-300 font-medium">
+                            🔥 Best Seller
+                          </span>
+                        )}
+                        {!product.is_featured && !product.is_best_seller && (
+                          <span className="text-muted-foreground text-xs">—</span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => handleEdit(product)}
+                          className="p-2 hover:bg-muted rounded-lg transition-colors text-foreground"
+                          title="Edit product"
+                        >
+                          <Edit size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(product.id)}
+                          className="p-2 hover:bg-destructive/10 rounded-lg transition-colors text-destructive"
+                          title="Delete product"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3">
+            {products.map((product) => (
+              <div key={product.id} className="bg-background border border-border rounded-xl p-4 space-y-3 shadow-sm">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-foreground">{product.name}</h3>
+                    <p className="text-xs text-muted-foreground mt-1">{product.slug}</p>
+                  </div>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => handleEdit(product)}
+                      className="p-2 hover:bg-muted rounded-lg transition-colors"
+                      title="Edit"
+                    >
                       <Edit size={16} />
                     </button>
-                    <button onClick={() => handleDelete(product.id)} className="p-1 hover:bg-muted rounded text-destructive">
-                      <Trash2 size={16} />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="bg-background border border-border rounded-xl overflow-hidden mt-6">
-        <div className="px-6 py-4 border-b border-border">
-          <h3 className="font-sans font-semibold">Categories</h3>
-        </div>
-        <table className="w-full">
-          <thead className="bg-muted">
-            <tr>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Name</th>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Slug</th>
-              <th className="text-left px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Products</th>
-              <th className="text-right px-6 py-3 text-xs font-sans font-semibold uppercase text-muted-foreground">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((category) => {
-              const attachedCount = products.filter((product) => product.category_id === category.id).length;
-              return (
-                <tr key={category.id} className="border-t border-border">
-                  <td className="px-6 py-4 text-sm font-medium">{category.name}</td>
-                  <td className="px-6 py-4 text-xs text-muted-foreground">{category.slug}</td>
-                  <td className="px-6 py-4 text-sm text-muted-foreground">{attachedCount}</td>
-                  <td className="px-6 py-4 text-right">
                     <button
-                      type="button"
-                      onClick={() => void handleDeleteCategory(category)}
-                      className="p-1 hover:bg-muted rounded text-destructive"
-                      title="Delete category"
+                      onClick={() => handleDelete(product.id)}
+                      className="p-2 hover:bg-destructive/10 rounded-lg transition-colors text-destructive"
+                      title="Delete"
                     >
                       <Trash2 size={16} />
                     </button>
-                  </td>
-                </tr>
-              );
-            })}
-            {categories.length === 0 && (
-              <tr>
-                <td colSpan={4} className="px-6 py-8 text-center text-sm text-muted-foreground">
-                  No categories yet.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2 text-sm border-t border-border/30 pt-3">
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Category</p>
+                    <p className="text-foreground">
+                      {categoryNameById.get(product.category_id || "") || "-"}
+                    </p>
+                  </div>
+
+                  {(product.is_featured || product.is_best_seller) && (
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Flags</p>
+                      <div className="flex gap-2 mt-1 flex-wrap">
+                        {product.is_featured && (
+                          <span className="inline-block px-2 py-1 rounded-full text-xs bg-purple-100/80 text-purple-800 dark:bg-purple-950/50 dark:text-purple-300 font-medium">
+                            ⭐ Featured
+                          </span>
+                        )}
+                        {product.is_best_seller && (
+                          <span className="inline-block px-2 py-1 rounded-full text-xs bg-orange-100/80 text-orange-800 dark:bg-orange-950/50 dark:text-orange-300 font-medium">
+                            🔥 Best Seller
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

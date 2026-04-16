@@ -88,57 +88,121 @@ const AdminLayout = () => {
   }, [resetIdleTimer]);
 
   return (
-    <div className="min-h-screen flex bg-muted">
-      {/* Sidebar */}
-      <aside className={`${sidebarOpen ? "w-64" : "w-0 overflow-hidden"} bg-foreground text-primary-foreground transition-all duration-300 flex flex-col`}>
-        <div className="p-6">
-          <h2 className="font-serif text-xl font-bold">Aya Home Project Admin</h2>
+    <div className="min-h-screen flex bg-background flex-col md:flex-row">
+      {/* Sidebar - Desktop + Mobile Responsive */}
+      <aside className={`
+        fixed md:relative inset-y-0 left-0 z-40 w-64 md:w-72
+        bg-gradient-to-b from-foreground to-foreground/95 text-primary-foreground
+        transform transition-transform duration-300 ease-in-out flex flex-col
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        md:translate-x-0 md:block
+        shadow-lg md:shadow-none
+      `}>
+        {/* Sidebar Header */}
+        <div className="p-6 md:p-8 border-b border-primary-foreground/20">
+          <h2 className="font-serif text-xl md:text-2xl font-bold tracking-tight">Aya Admin</h2>
+          <p className="text-xs text-primary-foreground/70 mt-1">Management Panel</p>
         </div>
-        <nav className="flex-1 px-4 space-y-1">
-          {adminNav.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-sans transition-colors ${
-                location.pathname === item.path
-                  ? "bg-primary-foreground/20"
-                  : "hover:bg-primary-foreground/10"
-              }`}
-            >
-              <item.icon size={18} />
-              {item.label}
-            </Link>
-          ))}
+
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-2">
+          {adminNav.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => {
+                  // Close sidebar on mobile after navigation
+                  if (window.innerWidth < 768) {
+                    setSidebarOpen(false);
+                  }
+                }}
+                className={`
+                  flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-sans
+                  transition-all duration-200 group
+                  ${isActive
+                    ? "bg-primary-foreground/20 text-white font-medium"
+                    : "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-white"
+                  }
+                `}
+              >
+                <item.icon size={20} className="flex-shrink-0 transition-transform group-hover:scale-110" />
+                <span>{item.label}</span>
+                {isActive && <span className="ml-auto h-1 w-1 rounded-full bg-white" />}
+              </Link>
+            );
+          })}
         </nav>
-        <div className="p-4">
+
+        {/* Sidebar Footer */}
+        <div className="p-4 md:p-6 border-t border-primary-foreground/20 space-y-2">
           <button
             type="button"
             onClick={() => {
               void handleLogout("manual");
             }}
             disabled={loggingOut}
-            className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-primary-foreground/10 rounded-lg transition-colors mb-2"
+            className={`
+              w-full flex items-center gap-3 px-4 py-3 text-sm rounded-lg
+              transition-all duration-200 group
+              ${loggingOut 
+                ? "opacity-50 cursor-not-allowed bg-primary-foreground/10"
+                : "hover:bg-primary-foreground/10 text-primary-foreground/80 hover:text-white"
+              }
+            `}
           >
-            <LogOut size={18} />
-            {loggingOut ? "Logging out..." : "Logout Admin"}
+            <LogOut size={18} className="flex-shrink-0" />
+            <span className="text-left">
+              {loggingOut ? "Signing out..." : "Logout"}
+            </span>
           </button>
-          <Link to="/" className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-primary-foreground/10 rounded-lg transition-colors">
-            <LogOut size={18} />
-            Back to Site
+          <Link 
+            to="/" 
+            className="
+              w-full flex items-center gap-3 px-4 py-3 text-sm rounded-lg
+              hover:bg-primary-foreground/10 transition-all duration-200
+              text-primary-foreground/80 hover:text-white
+            "
+          >
+            <LogOut size={18} className="flex-shrink-0" />
+            <span>Back to Site</span>
           </Link>
         </div>
       </aside>
 
+      {/* Overlay for mobile */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-30 md:hidden transition-opacity"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        <header className="bg-background border-b border-border px-6 py-4 flex items-center gap-4">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)}>
-            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-          <h1 className="font-sans font-semibold">Admin Dashboard</h1>
+      <div className="flex-1 flex flex-col min-h-screen md:min-h-0">
+        {/* Header */}
+        <header className="bg-background border-b border-border px-4 md:px-6 py-4 flex items-center justify-between sticky top-0 z-20 shadow-sm">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors"
+              aria-label="Toggle sidebar"
+            >
+              {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+            <h1 className="font-serif text-xl md:text-2xl font-bold">Admin Dashboard</h1>
+          </div>
+          <div className="text-xs md:text-sm text-muted-foreground">
+            {new Date().toLocaleDateString()}
+          </div>
         </header>
-        <main className="flex-1 p-6">
-          <Outlet />
+
+        {/* Main Content Area */}
+        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
+          <div className="max-w-7xl mx-auto">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
