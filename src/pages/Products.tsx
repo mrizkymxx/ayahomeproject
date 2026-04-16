@@ -169,7 +169,6 @@ const Products = () => {
           <img src={productsHero} alt="Suar Wood Collection" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={1200} height={600} />
           <div className="hero-overlay rounded-3xl">
             <div className="flex flex-col items-center justify-center">
-              <span className="text-4xl mb-2 animate-bounce">🌳</span>
               <h1 className="font-serif text-5xl md:text-6xl text-primary-foreground font-bold text-center">Suar Wood Collection</h1>
               <p className="text-primary-foreground/80 text-sm md:text-base mt-3">Premium handcrafted furniture from Indonesia</p>
             </div>
@@ -234,8 +233,8 @@ const Products = () => {
           {/* Categories Sidebar - Hidden on Mobile */}
           <div className="hidden md:block">
             <div className="bg-gradient-to-b from-secondary/30 to-secondary/10 rounded-xl p-4 border border-border/50 sticky top-4">
-              <h3 className="font-sans font-bold text-lg mb-4 text-foreground flex items-center gap-2">
-                <span className="text-xl">🏷️</span> Categories
+              <h3 className="font-sans font-bold text-lg mb-4 text-foreground">
+                Categories
               </h3>
               
               {/* Category Search - Only show if many categories */}
@@ -263,7 +262,7 @@ const Products = () => {
                   }`}
                 >
                   <span className="flex items-center gap-2">
-                    <span>📦</span> All Products
+                    All Products
                   </span>
                   <span className={`text-xs font-bold ${activeCategory === null ? 'text-background/70' : 'text-muted-foreground group-hover:text-foreground'}`}>
                     {products.length}
@@ -284,7 +283,6 @@ const Products = () => {
                       }`}
                     >
                       <span className="flex items-center gap-2 flex-1 min-w-0">
-                        <span className="text-sm opacity-60">{'⚫🟡🟢🟣🟠🔵'[idx % 6]}</span>
                         <span className="truncate">{cat.name}</span>
                       </span>
                       <span className={`text-xs font-bold ml-2 flex-shrink-0 ${activeCategory === cat.name ? 'text-background/70' : 'text-muted-foreground group-hover:text-foreground'}`}>
@@ -298,8 +296,8 @@ const Products = () => {
 
             {/* Contact CTA */}
             <div className="mt-6 p-4 bg-gradient-to-br from-destructive/10 to-orange-500/10 rounded-xl border border-destructive/20">
-              <p className="text-sm font-sans font-bold mb-2 text-foreground flex items-center gap-2">
-                <span className="text-lg">✨</span> Custom Slab?
+              <p className="text-sm font-sans font-bold mb-2 text-foreground">
+                Custom Slab?
               </p>
               <p className="text-xs text-muted-foreground mb-3">Contact us for custom Suar wood slabs, special dimensions, and bulk orders.</p>
               <Link 
@@ -393,12 +391,12 @@ const Products = () => {
                             <div className="absolute top-3 right-3 flex gap-2 flex-wrap justify-end">
                               {isBestSeller && (
                                 <span className="inline-block px-2.5 py-1.5 rounded-full text-xs font-bold bg-orange-500 text-white animate-pulse shadow-lg">
-                                  🔥 Best Seller
+                                  Best Seller
                                 </span>
                               )}
                               {isFeatured && (
                                 <span className="inline-block px-2.5 py-1.5 rounded-full text-xs font-bold bg-purple-500 text-white shadow-lg">
-                                  ⭐ Featured
+                                  Featured
                                 </span>
                               )}
                             </div>

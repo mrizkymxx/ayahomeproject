@@ -46,6 +46,8 @@ const ProductDetail = () => {
   const [related, setRelated] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
@@ -193,11 +195,21 @@ const ProductDetail = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
-            <img src={images[0]} alt={product.name} className="w-full rounded-xl mb-4" width={700} height={700} />
+            <img src={images[selectedImageIndex]} alt={product.name} className="w-full rounded-xl mb-4 cursor-pointer hover:opacity-90 transition-opacity" width={700} height={700} />
             {images.length > 1 && (
               <div className="grid grid-cols-4 gap-3">
                 {images.slice(0, 4).map((img, index) => (
-                  <img key={index} src={img} alt={`${product.name} ${index + 1}`} className="rounded-lg w-full h-24 object-cover" />
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={`rounded-lg w-full h-24 overflow-hidden border-2 transition-all cursor-pointer ${
+                      selectedImageIndex === index
+                        ? 'border-foreground'
+                        : 'border-border hover:border-foreground/50'
+                    }`}
+                  >
+                    <img src={img} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform" />
+                  </button>
                 ))}
               </div>
             )}
