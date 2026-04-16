@@ -218,17 +218,6 @@ const ArticleDetail = () => {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="relative w-full h-[400px] md:h-[500px] overflow-hidden bg-gradient-to-b from-slate-900/50 to-slate-900/20">
-        <img 
-          src={heroImage} 
-          alt={article.title} 
-          className="absolute inset-0 w-full h-full object-cover" 
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-      </section>
-
-      {/* Main Content */}
       <section className="section-container py-12 md:py-16">
         <div className="max-w-3xl mx-auto">
           {/* Back Link */}
@@ -304,6 +293,15 @@ const ArticleDetail = () => {
                 )}
               </button>
             </div>
+          </div>
+
+          {/* Featured Image */}
+          <div className="mb-8 rounded-xl overflow-hidden border border-border/30 hover:border-border/50 transition-all shadow-sm hover:shadow-md">
+            <img 
+              src={heroImage} 
+              alt={article.title} 
+              className="w-full h-[300px] md:h-[400px] object-cover" 
+            />
           </div>
 
           {/* Excerpt */}
