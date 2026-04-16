@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import { Link, useParams } from "react-router-dom";
-import { Calendar, User, ArrowLeft, Share2, Facebook, Twitter, Copy, Check, Loader2 } from "lucide-react";
+import { Calendar, User, ArrowLeft, Share2, Copy, Check, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -77,6 +77,7 @@ const ArticleDetail = () => {
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [canShare] = useState(() => typeof navigator !== 'undefined' && !!navigator.share);
 
   useEffect(() => {
     async function fetchArticle() {
@@ -144,6 +145,31 @@ const ArticleDetail = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleNativeShare = async () => {
+    if (!article || !navigator.share) return;
+
+    try {
+      await navigator.share({
+        title: article.title,
+        text: `${article.excerpt || article.title} — Read more on Aya Home Project`,
+        url: window.location.href,
+      });
+      toast({
+        title: "Shared!",
+        description: "Article shared successfully.",
+      });
+    } catch (error: any) {
+      // User cancelled share or error occurred - silently handle
+      if (error.name !== 'AbortError') {
+        toast({
+          variant: "destructive",
+          title: "Share failed",
+          description: "Could not share article. Please try again.",
+        });
+      }
+    }
+  };
+
   const handleShare = (platform: "facebook" | "twitter" | "whatsapp") => {
     if (!article) return;
     const url = encodeURIComponent(window.location.href);
@@ -192,55 +218,102 @@ const ArticleDetail = () => {
 
   return (
     <Layout>
-      <section className="section-container py-12">
+      {/* Hero Section */}
+      <section className="relative w-full h-[400px] md:h-[500px] overflow-hidden bg-gradient-to-b from-slate-900/50 to-slate-900/20">
+        <img 
+          src={heroImage} 
+          alt={article.title} 
+          className="absolute inset-0 w-full h-full object-cover" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+      </section>
+
+      {/* Main Content */}
+      <section className="section-container py-12 md:py-16">
         <div className="max-w-3xl mx-auto">
-          <Link to="/articles" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
-            <ArrowLeft size={14} />
+          {/* Back Link */}
+          <Link to="/articles" className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 mb-6 group transition-colors">
+            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
             Back to Articles
           </Link>
 
-          <div className="mb-6">
-            <span className="text-xs font-bold text-destructive">{article.category}</span>
-            <h1 className="font-serif text-4xl md:text-5xl mt-2 mb-4">{article.title}</h1>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-foreground/70">
-              <span className="flex items-center gap-1">
-                <User size={14} />
-                {article.author || "Aya Home Project"}
+          {/* Article Header */}
+          <div className="mb-8">
+            {/* Category Badge */}
+            <div className="inline-block mb-4">
+              <span className="px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-blue-500/10 text-blue-700 border border-blue-200/50 rounded-full">
+                {article.category}
               </span>
-              <span className="flex items-center gap-1">
-                <Calendar size={14} />
-                {dateText}
-              </span>
-              <span>{article.read_time}</span>
+            </div>
+
+            {/* Title */}
+            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4 text-foreground leading-tight">
+              {article.title}
+            </h1>
+
+            {/* Metadata */}
+            <div className="flex flex-wrap items-center gap-6 py-4 border-y border-border/30">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <User size={16} className="text-blue-600" />
+                <span className="font-medium">{article.author || "Aya Home Project"}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Calendar size={16} className="text-blue-600" />
+                <span className="font-medium">{dateText}</span>
+              </div>
+              {article.read_time && (
+                <div className="text-sm font-medium text-muted-foreground">
+                  {article.read_time}
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="rounded-2xl overflow-hidden mb-8">
-            <img src={heroImage} alt={article.title} className="w-full h-[320px] md:h-[450px] object-cover" />
+          {/* Share Section */}
+          <div className="mb-8 pb-8 border-b border-border/30">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Share this article</p>
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Native Share Button (iPhone/Android style) */}
+              {canShare && (
+                <button
+                  onClick={handleNativeShare}
+                  className="flex-1 md:flex-none px-4 py-2.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 border border-blue-300/50 hover:border-blue-400 text-blue-700 rounded-lg transition-all flex items-center justify-center gap-2 group font-semibold"
+                  title="Share using system share sheet"
+                >
+                  <Share2 size={18} className="group-hover:scale-110 transition-transform" />
+                  <span className="text-sm font-medium">Share</span>
+                </button>
+              )}
+              
+              {/* Copy Link */}
+              <button 
+                onClick={handleCopyLink}
+                className="flex-1 md:flex-none px-4 py-2.5 bg-muted/30 hover:bg-muted/50 border border-border rounded-lg transition-all flex items-center justify-center gap-2 group"
+                title="Copy link to clipboard"
+              >
+                {copied ? (
+                  <>
+                    <Check size={18} className="text-green-600" />
+                    <span className="text-sm font-medium text-green-600">Copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy size={18} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-sm font-medium">Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
-          <div className="mb-8 flex items-center gap-2">
-            <button onClick={() => handleShare("whatsapp")} className="px-3 py-2 border rounded-lg text-sm hover:bg-secondary">
-              <Share2 size={16} />
-            </button>
-            <button onClick={() => handleShare("facebook")} className="px-3 py-2 border rounded-lg text-sm hover:bg-secondary">
-              <Facebook size={16} />
-            </button>
-            <button onClick={() => handleShare("twitter")} className="px-3 py-2 border rounded-lg text-sm hover:bg-secondary">
-              <Twitter size={16} />
-            </button>
-            <button onClick={handleCopyLink} className="px-3 py-2 border rounded-lg text-sm hover:bg-secondary inline-flex items-center gap-2">
-              {copied ? <Check size={16} /> : <Copy size={16} />}
-              {copied ? "Copied" : "Copy link"}
-            </button>
-          </div>
-
+          {/* Excerpt */}
           {article.excerpt && (
-            <p className="text-lg leading-relaxed text-foreground/85 mb-8 border-l-4 border-border pl-4">
+            <p className="text-lg leading-relaxed text-foreground/85 mb-8 font-medium bg-blue-500/5 border-l-4 border-blue-400 p-4 rounded-r-lg">
               {article.excerpt}
             </p>
           )}
 
+          {/* Article Content */}
           <article
             className="article-content"
             dangerouslySetInnerHTML={{ __html: article.content || "<p>No content available.</p>" }}

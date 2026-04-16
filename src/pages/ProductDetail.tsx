@@ -315,56 +315,6 @@ const ProductDetail = () => {
                     <span className="text-sm font-medium">Share</span>
                   </button>
                 )}
-
-                {/* WhatsApp Share */}
-                <button 
-                  onClick={() => handleShare("whatsapp")}
-                  className="flex-1 md:flex-none px-4 py-2.5 bg-green-500/10 hover:bg-green-500/20 border border-green-200/50 hover:border-green-300 text-green-700 rounded-lg transition-all flex items-center justify-center gap-2 group"
-                  title="Share on WhatsApp"
-                >
-                  <MessageCircle size={18} className="group-hover:scale-110 transition-transform" />
-                  <span className="text-sm font-medium">WhatsApp</span>
-                </button>
-                
-                {/* Instagram Share */}
-                <button 
-                  onClick={() => handleShare("instagram")}
-                  className="flex-1 md:flex-none px-4 py-2.5 bg-gradient-to-br from-pink-500/10 to-purple-500/10 hover:from-pink-500/20 hover:to-purple-500/20 border border-pink-200/50 hover:border-pink-300 text-pink-700 rounded-lg transition-all flex items-center justify-center gap-2 group"
-                  title="Share on Instagram"
-                >
-                  <Instagram size={18} className="group-hover:scale-110 transition-transform" />
-                  <span className="text-sm font-medium">Instagram</span>
-                </button>
-                
-                {/* Threads Share */}
-                <button 
-                  onClick={() => handleShare("threads")}
-                  className="flex-1 md:flex-none px-4 py-2.5 bg-slate-500/10 hover:bg-slate-500/20 border border-slate-200/50 hover:border-slate-300 text-slate-700 rounded-lg transition-all flex items-center justify-center gap-2 group"
-                  title="Share on Threads"
-                >
-                  <span className="text-sm font-bold group-hover:scale-110 transition-transform">@</span>
-                  <span className="text-sm font-medium">Threads</span>
-                </button>
-                
-                {/* TikTok Share */}
-                <button 
-                  onClick={() => handleShare("tiktok")}
-                  className="flex-1 md:flex-none px-4 py-2.5 bg-black/5 hover:bg-black/10 border border-black/20 hover:border-black/40 text-foreground rounded-lg transition-all flex items-center justify-center gap-2 group"
-                  title="Share on TikTok"
-                >
-                  <Music size={18} className="group-hover:scale-110 transition-transform" />
-                  <span className="text-sm font-medium">TikTok</span>
-                </button>
-                
-                {/* X (Twitter) Share */}
-                <button 
-                  onClick={() => handleShare("x")}
-                  className="flex-1 md:flex-none px-4 py-2.5 bg-black/5 hover:bg-black/10 border border-border hover:border-foreground/30 text-foreground rounded-lg transition-all flex items-center justify-center gap-2 group"
-                  title="Share on X"
-                >
-                  <Twitter size={18} className="group-hover:scale-110 transition-transform" />
-                  <span className="text-sm font-medium">X</span>
-                </button>
                 
                 {/* Copy Link */}
                 <button 
