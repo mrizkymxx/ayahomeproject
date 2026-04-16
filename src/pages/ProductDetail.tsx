@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Share2, Facebook, Twitter, Copy, Check, Loader2 } from "lucide-react";
+import { MessageCircle, Facebook, Twitter, Copy, Check, Loader2, Heart, Share2, MapPin, Truck, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { applyProductSeoMeta, buildExcerpt } from "@/lib/seo";
@@ -192,18 +192,37 @@ const ProductDetail = () => {
           </ol>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Left: Product Images */}
           <div>
-            <img src={images[selectedImageIndex]} alt={product.name} className="w-full rounded-xl mb-4 cursor-pointer hover:opacity-90 transition-opacity" width={700} height={700} />
+            <div className="relative group">
+              <img 
+                src={images[selectedImageIndex]} 
+                alt={product.name} 
+                className="w-full rounded-2xl mb-6 cursor-pointer hover:opacity-90 transition-opacity shadow-lg" 
+                width={700} 
+                height={700} 
+              />
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  toast({ title: "Link copied!", description: "Product link copied to clipboard" });
+                }}
+                className="absolute top-4 right-4 bg-white/90 backdrop-blur hover:bg-white rounded-full p-3 transition-all shadow-lg"
+              >
+                <Heart size={20} className="text-foreground" />
+              </button>
+            </div>
+            
             {images.length > 1 && (
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-4 gap-2">
                 {images.slice(0, 4).map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`rounded-lg w-full h-24 overflow-hidden border-2 transition-all cursor-pointer ${
+                    className={`rounded-xl w-full h-24 overflow-hidden border-2 transition-all cursor-pointer ${
                       selectedImageIndex === index
-                        ? 'border-foreground'
+                        ? 'border-foreground shadow-lg'
                         : 'border-border hover:border-foreground/50'
                     }`}
                   >
@@ -214,61 +233,137 @@ const ProductDetail = () => {
             )}
           </div>
 
+          {/* Right: Product Info */}
           <div>
-            <div className="flex items-center gap-2 mb-3">
+            {/* Tags */}
+            <div className="flex items-center gap-2 mb-4 flex-wrap">
               {tags.map((tag) => (
-                <span key={tag} className="text-xs font-bold border border-foreground px-2 py-1 rounded">
+                <span key={tag} className="text-xs font-bold px-3 py-1.5 rounded-full bg-gradient-to-r from-orange-500/20 to-orange-500/10 text-orange-600 border border-orange-200/50">
                   {tag}
                 </span>
               ))}
-              <span className="text-xs text-muted-foreground border border-border px-2 py-1 rounded uppercase">{stockLabel}</span>
+              {stockLabel && (
+                <span className={`text-xs font-bold px-3 py-1.5 rounded-full border ${
+                  stockLabel.toLowerCase().includes('out') 
+                    ? 'bg-red-500/10 text-red-600 border-red-200/50'
+                    : 'bg-green-500/10 text-green-600 border-green-200/50'
+                }`}>
+                  {stockLabel}
+                </span>
+              )}
             </div>
 
-            <h1 className="font-serif text-3xl font-bold mb-3">{product.name}</h1>
-            <p className="text-sm text-muted-foreground mb-6">{product.category?.name}</p>
+            {/* Title & Category */}
+            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-2 text-foreground">{product.name}</h1>
+            <Link to={`/products?category=${product.category?.name}`} className="text-sm text-muted-foreground hover:text-foreground transition-colors mb-6 inline-block">
+              Category: <span className="font-semibold text-foreground">{product.category?.name || 'Uncategorized'}</span>
+            </Link>
 
-            <div className="mb-6 pb-6 border-b border-border">
-              <p className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <Share2 size={16} />
-                Share this product:
-              </p>
-              <div className="flex items-center gap-2">
-                <button onClick={() => handleShare("whatsapp")} className="px-3 py-2 bg-green-500 text-white rounded-lg text-sm">
-                  WhatsApp
-                </button>
-                <button onClick={() => handleShare("facebook")} className="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm">
-                  <Facebook size={16} />
-                </button>
-                <button onClick={() => handleShare("twitter")} className="px-3 py-2 bg-black text-white rounded-lg text-sm">
-                  <Twitter size={16} />
-                </button>
-                <button onClick={handleCopyLink} className="px-3 py-2 border rounded-lg text-sm inline-flex items-center gap-2">
-                  {copied ? <Check size={16} /> : <Copy size={16} />}
-                  {copied ? "Copied!" : "Copy Link"}
-                </button>
-              </div>
-            </div>
+            {/* Main CTA - WhatsApp Order Button */}
+            <button
+              onClick={() => handleShare("whatsapp")}
+              className="w-full mb-6 px-6 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 group"
+            >
+              <MessageCircle size={22} className="group-hover:animate-bounce" />
+              <span>Order via WhatsApp</span>
+            </button>
 
-            <div className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line mb-6">{product.description}</div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div className="border border-border rounded-lg p-4">
-                <h4 className="font-sans font-bold text-sm mb-2">Product Specifications</h4>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  {Object.entries(specs).length === 0 ? (
-                    <li>-</li>
+            {/* Share Section */}
+            <div className="mb-8 pb-8 border-b border-border/30">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Share this product</p>
+              <div className="flex items-center gap-3 flex-wrap">
+                {/* WhatsApp Share */}
+                <button 
+                  onClick={() => handleShare("whatsapp")}
+                  className="flex-1 md:flex-none px-4 py-2.5 bg-green-500/10 hover:bg-green-500/20 border border-green-200/50 hover:border-green-300 text-green-700 rounded-lg transition-all flex items-center justify-center gap-2 group"
+                >
+                  <MessageCircle size={18} className="group-hover:scale-110 transition-transform" />
+                  <span className="text-sm font-medium">Share</span>
+                </button>
+                
+                {/* Facebook Share */}
+                <button 
+                  onClick={() => handleShare("facebook")}
+                  className="flex-1 md:flex-none px-4 py-2.5 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-200/50 hover:border-blue-300 text-blue-700 rounded-lg transition-all flex items-center justify-center gap-2 group"
+                >
+                  <Facebook size={18} className="group-hover:scale-110 transition-transform" />
+                  <span className="text-sm font-medium">Share</span>
+                </button>
+                
+                {/* Twitter Share */}
+                <button 
+                  onClick={() => handleShare("twitter")}
+                  className="flex-1 md:flex-none px-4 py-2.5 bg-black/5 hover:bg-black/10 border border-border hover:border-foreground/30 text-foreground rounded-lg transition-all flex items-center justify-center gap-2 group"
+                >
+                  <Twitter size={18} className="group-hover:scale-110 transition-transform" />
+                  <span className="text-sm font-medium">Share</span>
+                </button>
+                
+                {/* Copy Link */}
+                <button 
+                  onClick={handleCopyLink}
+                  className="flex-1 md:flex-none px-4 py-2.5 bg-muted/30 hover:bg-muted/50 border border-border rounded-lg transition-all flex items-center justify-center gap-2 group"
+                >
+                  {copied ? (
+                    <>
+                      <Check size={18} className="text-green-600" />
+                      <span className="text-sm font-medium text-green-600">Copied</span>
+                    </>
                   ) : (
-                    Object.entries(specs).map(([k, v]) => <li key={k}>• {k}: {v}</li>)
+                    <>
+                      <Copy size={18} className="group-hover:scale-110 transition-transform" />
+                      <span className="text-sm font-medium">Copy</span>
+                    </>
                   )}
-                </ul>
+                </button>
               </div>
-              <div className="border border-border rounded-lg p-4">
-                <h4 className="font-sans font-bold text-sm mb-2">Delivery & Services</h4>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Free slab selection consultation</li>
-                  <li>• Kiln-dried & export-grade finishing</li>
-                  <li>• Worldwide shipping available</li>
-                  <li>• 1 year structural warranty</li>
+            </div>
+
+            {/* Description */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold mb-3 text-foreground">Description</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{product.description}</p>
+            </div>
+
+            {/* Specifications & Services */}
+            <div className="grid grid-cols-1 gap-4">
+              {/* Specifications */}
+              <div className="border border-border/30 rounded-xl p-5 bg-gradient-to-br from-muted/30 to-muted/10 backdrop-blur-sm">
+                <h4 className="font-sans font-bold text-base mb-4 text-foreground">Specifications</h4>
+                {Object.entries(specs).length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic">No specifications available</p>
+                ) : (
+                  <ul className="text-sm text-muted-foreground space-y-2">
+                    {Object.entries(specs).map(([k, v]) => (
+                      <li key={k} className="flex items-start gap-3">
+                        <span className="text-foreground font-medium min-w-fit">{k}:</span>
+                        <span>{v}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Delivery & Services */}
+              <div className="border border-border/30 rounded-xl p-5 bg-gradient-to-br from-muted/30 to-muted/10 backdrop-blur-sm">
+                <h4 className="font-sans font-bold text-base mb-4 text-foreground">Delivery & Services</h4>
+                <ul className="text-sm text-muted-foreground space-y-3">
+                  <li className="flex items-start gap-3">
+                    <Truck size={18} className="text-foreground mt-0.5 flex-shrink-0" />
+                    <span>Free slab selection consultation</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Shield size={18} className="text-foreground mt-0.5 flex-shrink-0" />
+                    <span>Kiln-dried & export-grade finishing</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <MapPin size={18} className="text-foreground mt-0.5 flex-shrink-0" />
+                    <span>Worldwide shipping available</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Shield size={18} className="text-foreground mt-0.5 flex-shrink-0" />
+                    <span>1 year structural warranty</span>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -277,22 +372,36 @@ const ProductDetail = () => {
       </section>
 
       {related.length > 0 && (
-        <section className="section-container py-12">
-          <h2 className="font-sans font-bold text-xl mb-6">Related Products</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <section className="section-container py-16 border-t border-border/30">
+          <div className="mb-10">
+            <h2 className="font-serif text-4xl font-bold mb-2">Related Products</h2>
+            <p className="text-muted-foreground">Explore more from our collection</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {related.map((item) => (
-              <Link to={`/products/${item.slug}`} key={item.id} className="group text-center block">
-                <div className="aspect-square flex items-center justify-center p-4 bg-secondary rounded-xl">
+              <Link to={`/products/${item.slug}`} key={item.id} className="group">
+                <div className="relative overflow-hidden rounded-2xl mb-4 aspect-square bg-secondary">
                   <img
                     src={item.images?.[0] || imageMap[item.slug] || afraChair}
                     alt={item.name}
-                    className="max-h-full object-contain group-hover:scale-105 transition-transform"
+                    className="w-full h-full object-contain p-6 group-hover:scale-110 transition-transform duration-300"
                     loading="lazy"
-                    width={200}
-                    height={200}
+                    width={250}
+                    height={250}
                   />
+                  {item.is_best_seller && (
+                    <div className="absolute top-3 right-3 px-3 py-1 bg-orange-500/90 text-white text-xs font-bold rounded-full">
+                      Best Seller
+                    </div>
+                  )}
+                  {item.is_featured && (
+                    <div className="absolute top-3 left-3 px-3 py-1 bg-purple-500/90 text-white text-xs font-bold rounded-full">
+                      Featured
+                    </div>
+                  )}
                 </div>
-                <p className="font-serif italic text-sm mt-2">{item.name}</p>
+                <h3 className="font-serif italic text-sm font-semibold group-hover:text-destructive transition-colors line-clamp-2">{item.name}</h3>
+                <p className="text-xs text-muted-foreground mt-1">{item.category?.name || 'Furniture'}</p>
               </Link>
             ))}
           </div>
