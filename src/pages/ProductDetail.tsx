@@ -134,24 +134,18 @@ const ProductDetail = () => {
     if (!product) return;
     const url = window.location.href;
     const text = `Check out ${product.name} from Aya Home Project!`;
+    const encodedUrl = encodeURIComponent(url);
+    const encodedText = encodeURIComponent(text);
     
     const shareUrls: Record<string, string> = {
       whatsapp: `https://wa.me/628164823454?text=${encodeURIComponent(`Hello Aya Home Project, I am interested in ordering ${product.name}. Can you send me more details about this Suar wood piece?\n\n${url}`)}`,
-      instagram: `https://instagram.com`,
-      threads: `https://threads.net`,
-      tiktok: `https://tiktok.com`,
-      x: `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+      instagram: `https://www.instagram.com/sharer.php?u=${encodedUrl}`,
+      threads: `https://www.threads.net/intent/post?text=${encodedText}%20${encodedUrl}`,
+      tiktok: `https://www.tiktok.com/share/video?url=${encodedUrl}`,
+      x: `https://x.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
     };
     
-    if (platform === "instagram" || platform === "threads" || platform === "tiktok") {
-      toast({
-        title: "Copy product link",
-        description: `Share this link on ${platform.charAt(0).toUpperCase() + platform.slice(1)}: ${url}`,
-      });
-      navigator.clipboard.writeText(`${text}\n${url}`);
-    } else {
-      window.open(shareUrls[platform], "_blank", "width=600,height=400");
-    }
+    window.open(shareUrls[platform], "_blank", "width=600,height=400");
   };
 
   if (loading) {
