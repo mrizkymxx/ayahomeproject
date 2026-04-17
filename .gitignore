@@ -28,3 +28,4 @@ planningmockup/
 *.njsproj
 *.sln
 *.sw?
+.vercel

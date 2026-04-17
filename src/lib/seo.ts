@@ -307,12 +307,17 @@ export function applyProductSeoMeta(input: ProductSeoMetaInput): void {
 
   upsertCanonical(input.canonicalUrl);
 
+  // Open Graph - Product
   upsertMetaByProperty("og:type", "product");
   upsertMetaByProperty("og:title", title);
   upsertMetaByProperty("og:description", input.description);
   upsertMetaByProperty("og:url", input.canonicalUrl);
   upsertMetaByProperty("og:image", imageUrl);
+  upsertMetaByProperty("og:image:width", "1200");
+  upsertMetaByProperty("og:image:height", "630");
+  upsertMetaByProperty("og:image:alt", input.name);
 
+  // Twitter Card
   upsertMetaByName("twitter:card", "summary_large_image");
   upsertMetaByName("twitter:title", title);
   upsertMetaByName("twitter:description", input.description);
