@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import { MessageCircle, Facebook, Twitter, Copy, Check, Loader2, Heart, Share2, MapPin, Truck, Shield, Instagram, Music } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -85,7 +85,7 @@ const ProductDetail = () => {
     fetchData();
   }, [slug]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!product || !slug) return;
 
     const canonicalUrl = `${window.location.origin}/products/${slug}`;

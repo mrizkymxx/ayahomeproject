@@ -204,7 +204,10 @@ function removeJsonLd(ids: string[]) {
 }
 
 function resolveSeoImage(imageUrl?: string): string {
-  return imageUrl || DEFAULT_SEO_IMAGE;
+  const resolved = imageUrl || DEFAULT_SEO_IMAGE;
+  console.log("resolveSeoImage input:", imageUrl);
+  console.log("resolveSeoImage resolved:", resolved);
+  return resolved;
 }
 
 export function applyPageSeoMeta(input: PageSeoMetaInput): void {
