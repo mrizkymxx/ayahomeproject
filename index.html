@@ -21,6 +21,19 @@
     <meta name="twitter:title" content="Aya Home Project | Premium Suar Wood Furniture Indonesia" />
     <meta name="twitter:description" content="Premium live-edge Suar (Trembesi) wood furniture handcrafted in Jepara, Indonesia. Custom dining tables, coffee tables, and bar tops for homes, hotels, and restaurants worldwide." />
     <meta name="twitter:image" content="https://ayahomeproject.com/og-ayahomeproject.jpg" />
+
+    <!-- ⚠️ CRITICAL: Set og:url to current page URL IMMEDIATELY (before crawlers read) -->
+    <script>
+      (function() {
+        const ogUrlMeta = document.querySelector('meta[property="og:url"]');
+        if (ogUrlMeta && typeof window !== 'undefined') {
+          // Set to current page URL for crawlers that read HTML before JS runs
+          const currentUrl = window.location.href;
+          ogUrlMeta.setAttribute('content', currentUrl);
+          console.log('[INDEX.HTML] Set og:url to:', currentUrl);
+        }
+      })();
+    </script>
   </head>
 
   <body>
