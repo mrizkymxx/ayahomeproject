@@ -167,9 +167,10 @@ const ProductDetail = () => {
         ? primaryImage
         : `${window.location.origin}${primaryImage.startsWith("/") ? primaryImage : `/${primaryImage}`}`;
 
+      // Keep share text SHORT and concise for better UX
       const shareData: ShareData = {
         title: product.name,
-        text: `Check out this premium Suar wood furniture: ${product.name} — handcrafted by Aya Home Project, Jepara. ${product.description ? product.description.slice(0, 100) : ''}`,
+        text: `Premium Suar wood furniture from Aya Home Project, Jepara - Handcrafted quality.`,
         url: window.location.href,
       };
 
