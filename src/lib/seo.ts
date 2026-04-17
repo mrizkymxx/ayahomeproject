@@ -304,6 +304,7 @@ export function applyProductSeoMeta(input: ProductSeoMetaInput): void {
   const imageUrl = resolveSeoImage(input.imageUrl);
 
   console.log("[applyProductSeoMeta] Setting product SEO meta tags");
+  console.log("[applyProductSeoMeta] input.canonicalUrl:", input.canonicalUrl);
   console.log("[applyProductSeoMeta] imageUrl after resolve:", imageUrl);
 
   document.title = title;
@@ -319,6 +320,7 @@ export function applyProductSeoMeta(input: ProductSeoMetaInput): void {
   upsertMetaByProperty("og:type", "product");
   upsertMetaByProperty("og:title", title);
   upsertMetaByProperty("og:description", input.description);
+  console.log("[applyProductSeoMeta] ABOUT TO SET og:url to:", input.canonicalUrl);
   upsertMetaByProperty("og:url", input.canonicalUrl);
   
   // CRITICAL: Set og:image with actual URL

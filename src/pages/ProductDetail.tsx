@@ -89,6 +89,9 @@ const ProductDetail = () => {
     if (!product || !slug) return;
 
     const canonicalUrl = `${window.location.origin}/products/${slug}`;
+    console.log("[SEO] window.location.origin:", window.location.origin);
+    console.log("[SEO] slug:", slug);
+    console.log("[SEO] canonicalUrl BEFORE applyProductSeoMeta:", canonicalUrl);
     
     // CRITICAL: Construct absolute image URL
     // Priority: 1) Product images from Supabase 2) Default OG image
@@ -117,7 +120,9 @@ const ProductDetail = () => {
 
     // Set meta tags IMMEDIATELY and SYNCHRONOUSLY
     // Social media crawlers read these right away - no async operations!
-    console.log("[SEO] Calling applyProductSeoMeta with imageUrl:", imageUrl);
+    console.log("[SEO] Calling applyProductSeoMeta with:");
+    console.log("  - canonicalUrl:", canonicalUrl);
+    console.log("  - imageUrl:", imageUrl);
     applyProductSeoMeta({
       name: product.name,
       description,
