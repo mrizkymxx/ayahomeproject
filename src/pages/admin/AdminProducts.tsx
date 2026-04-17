@@ -318,15 +318,42 @@ const AdminProducts = () => {
 
   const handleDeleteCategory = async (category: Category) => {
     const attachedCount = products.filter((product) => product.category_id === category.id).length;
+    
     if (attachedCount > 0) {
-      toast({
-        variant: "destructive",
-        title: "Category still used",
-        description: `Cannot delete "${category.name}" because ${attachedCount} product(s) still use it.`,
-      });
-      return;
+      // Show option to force delete or cancel
+      const shouldForceDelete = window.confirm(
+        `"${category.name}" is used by ${attachedCount} product(s).\n\n` +
+        `Choose OK to delete category and remove category assignment from products.\n` +
+        `Choose Cancel to keep the category.`
+      );
+      
+      if (!shouldForceDelete) return;
+      
+      // Update all products with this category to have NULL category_id
+      const productsToUpdate = products.filter((p) => p.category_id === category.id);
+      const { error: updateError } = await supabase
+        .from("products")
+        .update({ category_id: null })
+        .in("id", productsToUpdate.map((p) => p.id));
+      
+      if (updateError) {
+        toast({
+          variant: "destructive",
+          title: "Update failed",
+          description: `Could not update products: ${updateError.message}`,
+        });
+        return;
+      }
+      
+      // Update products state
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.category_id === category.id ? { ...p, category_id: null } : p
+        )
+      );
     }
 
+    // Delete the category
     const { error } = await supabase.from("categories").delete().eq("id", category.id);
     if (error) {
       toast({
@@ -343,7 +370,7 @@ const AdminProducts = () => {
     }
     toast({
       title: "Category deleted",
-      description: `"${category.name}" has been removed.`,
+      description: `"${category.name}" has been removed${attachedCount > 0 ? ` and ${attachedCount} product(s) updated` : ""}.`,
     });
   };
 

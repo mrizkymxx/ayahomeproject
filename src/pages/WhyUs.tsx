@@ -1,3 +1,4 @@
+
 import Layout from "@/components/Layout";
 import { Settings, DollarSign, FileText, Users, Shield, MessageCircle, CheckCircle2, PlayCircle } from "lucide-react";
 import { useEffect } from "react";
@@ -82,8 +83,8 @@ const WhyUs = () => {
         {/* Stats Section */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
           {stats.map((stat, index) => (
-            <div 
-              key={stat.label} 
+            <div
+              key={stat.label}
               className="bg-secondary p-6 rounded-xl text-center"
               data-aos="fade-up"
               data-aos-delay={index * 100}
@@ -97,8 +98,8 @@ const WhyUs = () => {
         {/* Features List */}
         <div className="max-w-3xl mx-auto space-y-8 mb-20">
           {features.map((feature, index) => (
-            <div 
-              key={feature.title} 
+            <div
+              key={feature.title}
               className="flex gap-6 items-start group"
               data-aos="fade-up"
               data-aos-delay={index * 100}
@@ -124,8 +125,8 @@ const WhyUs = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {process.map((item, index) => (
-            <div 
-              key={item.step} 
+            <div
+              key={item.step}
               className="relative bg-background rounded-xl p-6 border border-border"
               data-aos="fade-up"
               data-aos-delay={index * 100}
@@ -175,7 +176,7 @@ const WhyUs = () => {
       <section className="section-container py-16">
         <div className="max-w-4xl mx-auto">
           <h2 className="font-serif text-4xl md:text-5xl text-center mb-12" data-aos="fade-up">Our Commitment</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             <div className="space-y-4" data-aos="fade-right">
               <div className="flex gap-3 items-start">
@@ -195,7 +196,7 @@ const WhyUs = () => {
                 <p className="text-muted-foreground">1-year structural warranty on all products</p>
               </div>
             </div>
-            
+
             <div className="space-y-4" data-aos="fade-left" data-aos-delay="100">
               <div className="flex gap-3 items-start">
                 <CheckCircle2 className="shrink-0 mt-1 text-green-600" size={20} />
@@ -221,8 +222,8 @@ const WhyUs = () => {
           </p>
 
           <div className="text-center" data-aos="fade-up" data-aos-delay="100">
-            <Link 
-              to="/contact" 
+            <Link
+              to="/contact"
               className="inline-block px-8 py-3 bg-foreground text-background rounded-lg font-sans font-bold hover:bg-foreground/90 transition-colors"
             >
               Start Your Project Today
