@@ -157,43 +157,27 @@ const ProductDetail = () => {
     if (!product || !navigator.share) return;
 
     try {
-      // Use same image resolution as SEO meta
-      let primaryImage = afraChair;
+      // Native Share API akan menampilkan gambar dari og:meta tags di halaman ini
+      // Kita hanya perlu share title, text, dan URL
+      // Platform (WhatsApp, Facebook, etc) akan fetch og:image otomatis dari meta tags
       
-      if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-        primaryImage = product.images[0];
-      } else if (imageMap[product.slug]) {
-        primaryImage = imageMap[product.slug];
-      }
-      
-      const absoluteImageUrl = /^https?:\/\//.test(primaryImage)
-        ? primaryImage
-        : `${window.location.origin}${primaryImage.startsWith("/") ? primaryImage : `/${primaryImage}`}`;
-
-      // Keep share text SHORT and concise for better UX
       const shareData: ShareData = {
         title: product.name,
         text: `Premium Suar wood furniture from Aya Home Project, Jepara - Handcrafted quality.`,
         url: window.location.href,
       };
 
-      // Fetch and add image if available
-      if (absoluteImageUrl) {
-        try {
-          const response = await fetch(absoluteImageUrl);
-          const blob = await response.blob();
-          const file = new File([blob], `${product.slug}.jpg`, { type: blob.type });
-          if (navigator.share.length > 0) {
-            // Some browsers might support files in share
-            Object.assign(shareData, { files: [file] });
-          }
-        } catch (err) {
-          // If image fetch fails, continue without it
-          console.debug("Image fetch failed for share:", err);
-        }
-      }
+      console.log("[Native Share] Sharing with data:", {
+        title: shareData.title,
+        text: shareData.text,
+        url: shareData.url,
+      });
+      console.log("[Native Share] OG meta tags will provide image from:", {
+        og_image_from_meta: document.querySelector('meta[property="og:image"]')?.getAttribute('content'),
+      });
 
       await navigator.share(shareData);
+      
       toast({
         title: "Shared!",
         description: "Product shared successfully.",
@@ -201,6 +185,7 @@ const ProductDetail = () => {
     } catch (error: any) {
       // User cancelled share or error occurred - silently handle
       if (error.name !== 'AbortError') {
+        console.error("[Native Share] Error:", error);
         toast({
           variant: "destructive",
           title: "Share failed",
