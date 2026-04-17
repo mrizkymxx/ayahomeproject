@@ -158,12 +158,6 @@ export default async function handler(
       userAgent: userAgent.substring(0, 100),
     });
 
-    // Check if this is a bot
-    if (!isBot(userAgent)) {
-      console.log("[OG API] Not a bot, redirecting to SPA");
-      return res.status(307).redirect(`/${path}`);
-    }
-
     // Parse path to determine if product or article
     if (!path) {
       console.log("[OG API] No path provided");
@@ -179,6 +173,32 @@ export default async function handler(
       return res.redirect("/");
     }
 
+    // Check if this is a bot
+    if (!isBot(userAgent)) {
+      console.log("[OG API] Not a bot, serving SPA wrapper");
+      // For browsers: serve SPA wrapper that loads the app with correct path
+      const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aya Home Project | Premium Suar Wood Furniture Indonesia</title>
+  <script>
+    // Preserve the original path and load SPA
+    window.__initialPath = '/${path}';
+  </script>
+  <script type="module" src="/src/main.tsx"></script>
+  <link rel="stylesheet" href="/src/index.css">
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>`;
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      return res.status(200).send(html);
+    }
+
+    // For bots: fetch meta tags and return enriched HTML
     let meta: MetaTags | null = null;
 
     if (type === "products") {
