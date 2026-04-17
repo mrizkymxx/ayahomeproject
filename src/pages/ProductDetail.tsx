@@ -88,79 +88,59 @@ const ProductDetail = () => {
   useLayoutEffect(() => {
     if (!product || !slug) return;
 
-    const setupSeo = async () => {
-      const canonicalUrl = `${window.location.origin}/products/${slug}`;
-      
-      // Get primary image with proper fallback
-      let primaryImage = afraChair; // default fallback
-      let imageSource = "default";
-      
-      if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-        // Use first image from product.images (from Supabase)
-        primaryImage = product.images[0];
-        imageSource = "supabase";
-      } else if (imageMap[product.slug]) {
-        // Fallback to imageMap
-        primaryImage = imageMap[product.slug];
-        imageSource = "imageMap";
-      }
-      
-      console.log(`[SEO] Image source: ${imageSource}`, primaryImage);
-      
-      // Ensure absolute URL
-      let imageUrl = /^https?:\/\//.test(primaryImage)
-        ? primaryImage
-        : `${window.location.origin}${primaryImage.startsWith("/") ? primaryImage : `/${primaryImage}`}`;
-      
-      // Verify image is accessible (for social media crawlers)
-      if (imageSource === "supabase") {
-        try {
-          const headResponse = await fetch(imageUrl, { method: "HEAD" });
-          if (!headResponse.ok) {
-            console.warn(`[SEO] Supabase image returned ${headResponse.status}, using fallback`);
-            imageUrl = /^https?:\/\//.test(afraChair)
-              ? afraChair
-              : `${window.location.origin}${afraChair.startsWith("/") ? afraChair : `/${afraChair}`}`;
-          }
-        } catch (err) {
-          console.warn("[SEO] Supabase image fetch failed, using fallback:", err);
-          imageUrl = /^https?:\/\//.test(afraChair)
-            ? afraChair
-            : `${window.location.origin}${afraChair.startsWith("/") ? afraChair : `/${afraChair}`}`;
-        }
-      }
-      
-      console.log("[SEO] Final OG:image URL:", imageUrl);
-      
-      const description = buildExcerpt(
-        product.description || `${product.name} — premium Suar wood furniture handcrafted by Aya Home Project, Jepara.`,
+    const canonicalUrl = `${window.location.origin}/products/${slug}`;
+    
+    // Get primary image with proper fallback
+    let primaryImage = afraChair; // default fallback
+    let imageSource = "default";
+    
+    if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+      // Use first image from product.images (from Supabase)
+      primaryImage = product.images[0];
+      imageSource = "supabase";
+    } else if (imageMap[product.slug]) {
+      // Fallback to imageMap
+      primaryImage = imageMap[product.slug];
+      imageSource = "imageMap";
+    }
+    
+    console.log(`[SEO] Image source: ${imageSource}`, primaryImage);
+    
+    // Ensure absolute URL - MUST BE SYNCHRONOUS for meta tags to be available immediately
+    const imageUrl = /^https?:\/\//.test(primaryImage)
+      ? primaryImage
+      : `${window.location.origin}${primaryImage.startsWith("/") ? primaryImage : `/${primaryImage}`}`;
+    
+    console.log("[SEO] Final OG:image URL:", imageUrl);
+    
+    const description = buildExcerpt(
+      product.description || `${product.name} — premium Suar wood furniture handcrafted by Aya Home Project, Jepara.`,
+      product.name,
+      160,
+    );
+    const normalizedStock = (product.stock_status || "").toLowerCase();
+    const availability = normalizedStock.includes("out") ? "OutOfStock" : "InStock";
+
+    // Set meta tags IMMEDIATELY and SYNCHRONOUSLY
+    // Social media crawlers read these right away - no async operations!
+    applyProductSeoMeta({
+      name: product.name,
+      description,
+      canonicalUrl,
+      imageUrl,
+      category: product.category?.name,
+      sku: product.slug,
+      availability,
+      keywords: [
         product.name,
-        160,
-      );
-      const normalizedStock = (product.stock_status || "").toLowerCase();
-      const availability = normalizedStock.includes("out") ? "OutOfStock" : "InStock";
-
-      applyProductSeoMeta({
-        name: product.name,
-        description,
-        canonicalUrl,
-        imageUrl,
-        category: product.category?.name,
-        sku: product.slug,
-        availability,
-        keywords: [
-          product.name,
-          product.category?.name || "",
-          "suar wood furniture",
-          "live edge table",
-          "trembesi wood",
-          "Aya Home Project",
-        ].filter(Boolean),
-        specs: product.specifications || undefined,
-      });
-    };
-
-    setupSeo();
+        product.category?.name || "",
+        "suar wood furniture",
+        "live edge table",
+        "trembesi wood",
+        "Aya Home Project",
+      ].filter(Boolean),
+      specs: product.specifications || undefined,
+    });
   }, [product, slug]);
 
   const handleCopyLink = () => {
