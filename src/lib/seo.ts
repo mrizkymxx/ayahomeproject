@@ -171,8 +171,10 @@ function upsertMetaByProperty(property: string, content: string) {
     el = document.createElement("meta");
     el.setAttribute("property", property);
     document.head.appendChild(el);
+    console.log(`[upsertMetaByProperty] Created new meta[property="${property}"]`);
   }
   el.setAttribute("content", content);
+  console.log(`[upsertMetaByProperty] Set meta[property="${property}"] = "${content}"`);
 }
 
 function upsertCanonical(url: string) {
@@ -205,8 +207,11 @@ function removeJsonLd(ids: string[]) {
 
 function resolveSeoImage(imageUrl?: string): string {
   const resolved = imageUrl || DEFAULT_SEO_IMAGE;
-  console.log("resolveSeoImage input:", imageUrl);
-  console.log("resolveSeoImage resolved:", resolved);
+  console.log("[SEO resolveSeoImage] Input:", imageUrl);
+  console.log("[SEO resolveSeoImage] Resolved to:", resolved);
+  if (!resolved.startsWith("http")) {
+    console.warn("[SEO resolveSeoImage] WARNING: Image URL is not absolute!", resolved);
+  }
   return resolved;
 }
 
@@ -298,6 +303,9 @@ export function applyProductSeoMeta(input: ProductSeoMetaInput): void {
   const title = `${input.name} | Aya Home Project`;
   const imageUrl = resolveSeoImage(input.imageUrl);
 
+  console.log("[applyProductSeoMeta] Setting product SEO meta tags");
+  console.log("[applyProductSeoMeta] imageUrl after resolve:", imageUrl);
+
   document.title = title;
   upsertMetaByName("description", input.description);
   upsertMetaByName("robots", "index,follow,max-image-preview:large");
@@ -312,7 +320,11 @@ export function applyProductSeoMeta(input: ProductSeoMetaInput): void {
   upsertMetaByProperty("og:title", title);
   upsertMetaByProperty("og:description", input.description);
   upsertMetaByProperty("og:url", input.canonicalUrl);
+  
+  // CRITICAL: Set og:image with actual URL
+  console.log("[applyProductSeoMeta] Setting og:image to:", imageUrl);
   upsertMetaByProperty("og:image", imageUrl);
+  
   upsertMetaByProperty("og:image:width", "1200");
   upsertMetaByProperty("og:image:height", "630");
   upsertMetaByProperty("og:image:alt", input.name);

@@ -90,28 +90,22 @@ const ProductDetail = () => {
 
     const canonicalUrl = `${window.location.origin}/products/${slug}`;
     
-    // Get primary image with proper fallback
-    let primaryImage = afraChair; // default fallback
+    // CRITICAL: Construct absolute image URL
+    // Priority: 1) Product images from Supabase 2) Default OG image
+    let imageUrl = "https://ayahomeproject.com/og-ayahomeproject.jpg"; // default fallback
     let imageSource = "default";
     
     if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-      // Use first image from product.images (from Supabase)
-      primaryImage = product.images[0];
+      // Use first image from Supabase - should already be absolute URL
+      imageUrl = product.images[0];
       imageSource = "supabase";
-    } else if (imageMap[product.slug]) {
-      // Fallback to imageMap
-      primaryImage = imageMap[product.slug];
-      imageSource = "imageMap";
+      console.log("[SEO] Using Supabase image:", imageUrl);
+    } else {
+      console.log("[SEO] No product images, using default OG image");
     }
     
-    console.log(`[SEO] Image source: ${imageSource}`, primaryImage);
-    
-    // Ensure absolute URL - MUST BE SYNCHRONOUS for meta tags to be available immediately
-    const imageUrl = /^https?:\/\//.test(primaryImage)
-      ? primaryImage
-      : `${window.location.origin}${primaryImage.startsWith("/") ? primaryImage : `/${primaryImage}`}`;
-    
-    console.log("[SEO] Final OG:image URL:", imageUrl);
+    console.log("[SEO] Final imageUrl for og:image:", imageUrl);
+    console.log("[SEO] Image source:", imageSource);
     
     const description = buildExcerpt(
       product.description || `${product.name} — premium Suar wood furniture handcrafted by Aya Home Project, Jepara.`,
@@ -123,11 +117,12 @@ const ProductDetail = () => {
 
     // Set meta tags IMMEDIATELY and SYNCHRONOUSLY
     // Social media crawlers read these right away - no async operations!
+    console.log("[SEO] Calling applyProductSeoMeta with imageUrl:", imageUrl);
     applyProductSeoMeta({
       name: product.name,
       description,
       canonicalUrl,
-      imageUrl,
+      imageUrl, // MUST be absolute URL!
       category: product.category?.name,
       sku: product.slug,
       availability,
