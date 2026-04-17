@@ -391,6 +391,38 @@ const AdminProducts = () => {
         </button>
       </div>
 
+      {/* Categories Management */}
+      {categories.length > 0 && (
+        <div className="bg-background border border-border rounded-xl p-6 mb-8">
+          <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
+            📁 Manage Categories ({categories.length})
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category) => {
+              const productCount = products.filter((p) => p.category_id === category.id).length;
+              return (
+                <div
+                  key={category.id}
+                  className="flex items-center gap-2 px-3 py-2 bg-muted rounded-lg border border-border hover:border-border/70 transition-all group"
+                >
+                  <span className="text-sm font-medium text-foreground">
+                    {category.name}
+                    <span className="text-xs text-muted-foreground ml-1">({productCount})</span>
+                  </span>
+                  <button
+                    onClick={() => handleDeleteCategory(category)}
+                    className="p-1 opacity-0 group-hover:opacity-100 hover:bg-destructive/20 rounded transition-all text-destructive"
+                    title={`Delete ${category.name}`}
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Add/Edit Form */}
       {showForm && (
         <div className="bg-background border border-border rounded-xl p-6 md:p-8 mb-8 shadow-sm">
@@ -480,19 +512,33 @@ const AdminProducts = () => {
                 </span>
               </div>
               {currentImageList.length > 0 && (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
-                  {currentImageList.map((url, index) => (
-                    <div key={`${url}-${index}`} className="relative border border-border rounded-md overflow-hidden">
-                      <img src={url} alt={`Product ${index + 1}`} className="w-full h-28 object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => void removeImageFromForm(url)}
-                        className="absolute top-1 right-1 p-1 rounded-full bg-background/90 border border-border"
-                      >
-                        <X size={12} />
-                      </button>
-                    </div>
-                  ))}
+                <div>
+                  <p className="text-sm font-medium text-foreground mb-3 mt-4">Preview ({currentImageList.length} image{currentImageList.length !== 1 ? 's' : ''})</p>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {currentImageList.map((url, index) => (
+                      <div key={`${url}-${index}`} className="relative group">
+                        <div className="border border-border rounded-lg overflow-hidden bg-muted aspect-square">
+                          <img 
+                            src={url} 
+                            alt={`Product ${index + 1}`} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                            loading="lazy"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => void removeImageFromForm(url)}
+                          className="absolute -top-2 -right-2 p-2 rounded-full bg-destructive text-background opacity-0 group-hover:opacity-100 transition-all shadow-lg hover:scale-110"
+                          title="Remove image"
+                        >
+                          <X size={16} />
+                        </button>
+                        <p className="text-xs text-muted-foreground mt-1 truncate">
+                          Image {index + 1}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
