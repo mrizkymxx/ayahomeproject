@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/products/:slug",
+      "destination": "/api/og?path=products/:slug"
+    },
+    {
+      "source": "/articles/:slug",
+      "destination": "/api/og?path=articles/:slug"
+    },
+    {
       "source": "/((?!.*\\.).*)",
       "destination": "/index.html"
     }
