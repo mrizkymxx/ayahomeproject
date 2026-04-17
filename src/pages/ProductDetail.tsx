@@ -135,11 +135,34 @@ const ProductDetail = () => {
     if (!product || !navigator.share) return;
 
     try {
-      await navigator.share({
+      const primaryImage = product.images?.[0] || imageMap[product.slug];
+      const absoluteImageUrl = primaryImage && /^https?:\/\//.test(primaryImage)
+        ? primaryImage
+        : primaryImage ? `${window.location.origin}${primaryImage.startsWith("/") ? primaryImage : `/${primaryImage}`}` : undefined;
+
+      // Try to share with image if possible
+      const shareData: ShareData = {
         title: product.name,
-        text: `Check out this premium Suar wood furniture from Aya Home Project!`,
+        text: `Check out this premium Suar wood furniture: ${product.name} — handcrafted by Aya Home Project, Jepara. ${product.description ? product.description.slice(0, 100) : ''}`,
         url: window.location.href,
-      });
+      };
+
+      // Fetch and add image if available
+      if (absoluteImageUrl) {
+        try {
+          const response = await fetch(absoluteImageUrl);
+          const blob = await response.blob();
+          const file = new File([blob], `${product.slug}.jpg`, { type: blob.type });
+          if (navigator.share.length > 0) {
+            // Some browsers might support files in share
+            Object.assign(shareData, { files: [file] });
+          }
+        } catch {
+          // If image fetch fails, continue without it
+        }
+      }
+
+      await navigator.share(shareData);
       toast({
         title: "Shared!",
         description: "Product shared successfully.",
