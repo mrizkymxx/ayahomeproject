@@ -1,5 +1,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { createClient } from "@supabase/supabase-js";
+import * as fs from "fs";
+import * as path from "path";
 
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || "";
 const SUPABASE_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY || "";
@@ -150,52 +152,44 @@ export default async function handler(
 ): Promise<void> {
   try {
     const userAgent = req.headers["user-agent"] || "";
-    const path = req.query.path as string;
+    const path_query = req.query.path as string;
 
     console.log("[OG API] Request:", {
-      path,
+      path: path_query,
       isBot: isBot(userAgent),
       userAgent: userAgent.substring(0, 100),
     });
 
     // Parse path to determine if product or article
-    if (!path) {
+    if (!path_query) {
       console.log("[OG API] No path provided");
       return res.redirect("/");
     }
 
-    const segments = path.split("/").filter(Boolean);
+    const segments = path_query.split("/").filter(Boolean);
     const type = segments[0]; // "products" or "articles"
     const slug = segments[1]; // the slug
 
     if (!slug) {
-      console.log("[OG API] No slug in path:", path);
+      console.log("[OG API] No slug in path:", path_query);
       return res.redirect("/");
     }
 
     // Check if this is a bot
     if (!isBot(userAgent)) {
-      console.log("[OG API] Not a bot, serving SPA wrapper");
-      // For browsers: serve SPA wrapper that loads the app with correct path
-      const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aya Home Project | Premium Suar Wood Furniture Indonesia</title>
-  <script>
-    // Preserve the original path and load SPA
-    window.__initialPath = '/${path}';
-  </script>
-  <script type="module" src="/src/main.tsx"></script>
-  <link rel="stylesheet" href="/src/index.css">
-</head>
-<body>
-  <div id="root"></div>
-</body>
-</html>`;
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      return res.status(200).send(html);
+      console.log("[OG API] Not a bot, serving SPA from dist/index.html");
+      // For browsers: serve the built SPA HTML from dist
+      try {
+        const indexPath = path.join(process.cwd(), "dist", "index.html");
+        const spaHtml = fs.readFileSync(indexPath, "utf-8");
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
+        res.setHeader("Cache-Control", "public, max-age=3600"); // 1hr cache for browsers
+        return res.status(200).send(spaHtml);
+      } catch (err) {
+        console.error("[OG API] Could not read dist/index.html:", err);
+        // Fallback: redirect to SPA
+        return res.status(307).redirect(`/${path_query}`);
+      }
     }
 
     // For bots: fetch meta tags and return enriched HTML
@@ -209,17 +203,17 @@ export default async function handler(
 
     // Use default if data not found
     if (!meta) {
-      console.log("[OG API] Using default meta for path:", path);
+      console.log("[OG API] Using default meta for path:", path_query);
       meta = {
         title: DEFAULT_TITLE,
         description: DEFAULT_DESCRIPTION,
         image: DEFAULT_IMAGE,
-        url: `https://www.ayahomeproject.com/${path}`,
+        url: `https://www.ayahomeproject.com/${path_query}`,
         type: type === "products" ? "product" : "article",
       };
     }
 
-    const html = buildHtmlWithMeta(meta, `/${path}`);
+    const html = buildHtmlWithMeta(meta, `/${path_query}`);
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=86400"); // 1hr browser, 24hr edge
