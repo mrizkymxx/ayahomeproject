@@ -89,10 +89,29 @@ const ProductDetail = () => {
     if (!product || !slug) return;
 
     const canonicalUrl = `${window.location.origin}/products/${slug}`;
-    const primaryImage = product.images?.[0] || imageMap[product.slug] || afraChair;
+    
+    // Get primary image with proper fallback
+    let primaryImage = afraChair; // default fallback
+    
+    if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+      // Use first image from product.images (from Supabase)
+      primaryImage = product.images[0];
+      console.log("Using Supabase image:", primaryImage);
+    } else if (imageMap[product.slug]) {
+      // Fallback to imageMap
+      primaryImage = imageMap[product.slug];
+      console.log("Using imageMap:", primaryImage);
+    } else {
+      console.log("Using default image:", primaryImage);
+    }
+    
+    // Ensure absolute URL
     const imageUrl = /^https?:\/\//.test(primaryImage)
       ? primaryImage
       : `${window.location.origin}${primaryImage.startsWith("/") ? primaryImage : `/${primaryImage}`}`;
+    
+    console.log("Final OG:image URL:", imageUrl);
+    
     const description = buildExcerpt(
       product.description || `${product.name} — premium Suar wood furniture handcrafted by Aya Home Project, Jepara.`,
       product.name,
@@ -135,12 +154,19 @@ const ProductDetail = () => {
     if (!product || !navigator.share) return;
 
     try {
-      const primaryImage = product.images?.[0] || imageMap[product.slug];
-      const absoluteImageUrl = primaryImage && /^https?:\/\//.test(primaryImage)
+      // Use same image resolution as SEO meta
+      let primaryImage = afraChair;
+      
+      if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+        primaryImage = product.images[0];
+      } else if (imageMap[product.slug]) {
+        primaryImage = imageMap[product.slug];
+      }
+      
+      const absoluteImageUrl = /^https?:\/\//.test(primaryImage)
         ? primaryImage
-        : primaryImage ? `${window.location.origin}${primaryImage.startsWith("/") ? primaryImage : `/${primaryImage}`}` : undefined;
+        : `${window.location.origin}${primaryImage.startsWith("/") ? primaryImage : `/${primaryImage}`}`;
 
-      // Try to share with image if possible
       const shareData: ShareData = {
         title: product.name,
         text: `Check out this premium Suar wood furniture: ${product.name} — handcrafted by Aya Home Project, Jepara. ${product.description ? product.description.slice(0, 100) : ''}`,
@@ -157,8 +183,9 @@ const ProductDetail = () => {
             // Some browsers might support files in share
             Object.assign(shareData, { files: [file] });
           }
-        } catch {
+        } catch (err) {
           // If image fetch fails, continue without it
+          console.debug("Image fetch failed for share:", err);
         }
       }
 
