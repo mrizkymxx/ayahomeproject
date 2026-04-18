@@ -87,7 +87,7 @@ const AboutUs = () => {
                 <p className="text-sm text-muted-foreground mt-1">{item.title}</p>
               </div>
               <div>
-                <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+                <p className="text-foreground leading-relaxed">{item.description}</p>
               </div>
             </div>
           ))}

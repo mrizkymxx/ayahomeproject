@@ -60,13 +60,13 @@ const Footer = () => {
 
             <div>
               <h3 className="font-sans font-semibold text-sm mb-3">Our Workshop</h3>
-              <div className="text-sm text-muted-foreground space-y-1 leading-6">
+              <div className="text-sm space-y-1 leading-6">
                 <p className="font-semibold text-foreground">Aya Home Project</p>
-                <p>Serogenen, Pekalongan</p>
-                <p>Batealit, Jepara Regency</p>
-                <p>Central Java 59461</p>
-                <p>Indonesia</p>
-                <p className="pt-2 text-xs">International inquiries are welcome.</p>
+                <p className="text-foreground">Serogenen, Pekalongan</p>
+                <p className="text-foreground">Batealit, Jepara Regency</p>
+                <p className="text-foreground">Central Java 59461</p>
+                <p className="text-foreground">Indonesia</p>
+                <p className="pt-2 text-xs text-muted-foreground">International inquiries are welcome.</p>
               </div>
             </div>
 
