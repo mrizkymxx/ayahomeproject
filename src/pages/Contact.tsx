@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { MapPin, Phone, Clock, Send, Instagram, MessageCircle, Store } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { submitInquiry } from "@/lib/supabase-hooks";
-import contactHero from "@/assets/generated/og-ayahomeproject.jpg";
+import contactHero from '@/assets/generated/og-ayahomeproject.webp';
 import { applyPageSeoMeta } from "@/lib/seo";
 
 const Contact = () => {

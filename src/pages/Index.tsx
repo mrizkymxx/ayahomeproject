@@ -8,16 +8,17 @@ import { useToast } from "@/hooks/use-toast";
 import { submitInquiry } from "@/lib/supabase-hooks";
 import { supabase } from "@/integrations/supabase/client";
 import { applyPageSeoMeta } from "@/lib/seo";
-import heroSlide01 from "@/assets/generated/hero-home-01.jpg";
-import heroSlide02 from "@/assets/generated/hero-home-02.jpg";
-import heroSlide03 from "@/assets/generated/hero-home-03.jpg";
-import afraChair from "@/assets/products/afra-chair.jpg";
-import yolaChair from "@/assets/products/yola-chair.jpg";
-import landaChair from "@/assets/products/landa-chair.jpg";
-import briliyChair from "@/assets/products/briliy-chair.jpg";
-import catalogImg01 from "@/assets/generated/catalog-book-01.jpg";
-import catalogImg02 from "@/assets/generated/catalog-book-02.jpg";
-import catalogImg03 from "@/assets/generated/catalog-book-03.jpg";
+import { ResponsiveOptimizedImage } from "@/lib/vercel-image-optimization";
+import heroSlide01 from '@/assets/generated/hero-home-01.webp';
+import heroSlide02 from '@/assets/generated/hero-home-02.webp';
+import heroSlide03 from '@/assets/generated/hero-home-03.webp';
+import afraChair from '@/assets/products/afra-chair.webp';
+import yolaChair from '@/assets/products/yola-chair.webp';
+import landaChair from '@/assets/products/landa-chair.webp';
+import briliyChair from '@/assets/products/briliy-chair.webp';
+import catalogImg01 from '@/assets/generated/catalog-book-01.webp';
+import catalogImg02 from '@/assets/generated/catalog-book-02.webp';
+import catalogImg03 from '@/assets/generated/catalog-book-03.webp';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -225,7 +226,7 @@ const Index = () => {
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="bg-secondary rounded-xl overflow-hidden aspect-square flex items-center justify-center p-8 group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
-                <img src={product.img} alt={product.name} className="max-h-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={400} />
+                <ResponsiveOptimizedImage src={product.img} alt={product.name} className="max-h-full object-contain group-hover:scale-110 transition-transform duration-300" width={400} height={400} />
               </div>
               <p className="mt-4 font-serif text-lg italic">{product.name}</p>
             </Link>

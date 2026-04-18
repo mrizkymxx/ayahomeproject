@@ -5,9 +5,9 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { applyPageSeoMeta } from "@/lib/seo";
-import smallRoom from "@/assets/generated/small-room.jpg";
-import wallPaint from "@/assets/generated/wall-paint.jpg";
-import moldyFurniture from "@/assets/generated/moldy-furniture.jpg";
+import smallRoom from '@/assets/generated/small-room.webp';
+import wallPaint from '@/assets/generated/wall-paint.webp';
+import moldyFurniture from '@/assets/generated/moldy-furniture.webp';
 
 // Fallback hardcoded data
 const hardcodedArticles = [
@@ -22,7 +22,7 @@ const hardcodedArticles = [
     read_time: "5 min read",
     excerpt: "Selecting the right Suar slab is the most important step in creating your dream table. Learn how to evaluate grain patterns, moisture content, thickness, and live-edge profiles to find a slab that matches your space and style perfectly.",
     image: smallRoom,
-    image_url: "/src/assets/generated/small-room.jpg",
+    image_url: "/src/assets/generated/small-room.webp",
     featured: true,
     is_featured: true,
   },
@@ -37,7 +37,7 @@ const hardcodedArticles = [
     read_time: "4 min read",
     excerpt: "Explore the differences between live-edge and straight-edge Suar wood finishes. Understand when the natural bark edge adds character versus when a clean, refined edge suits your interior design better.",
     image: wallPaint,
-    image_url: "/src/assets/generated/wall-paint.jpg",
+    image_url: "/src/assets/generated/wall-paint.webp",
     featured: false,
     is_featured: false,
   },
@@ -52,7 +52,7 @@ const hardcodedArticles = [
     read_time: "6 min read",
     excerpt: "Suar wood is naturally durable, but proper care extends its beauty for generations. Learn the best practices for cleaning, oiling, protecting against humidity, and restoring your Suar furniture's original lustre.",
     image: moldyFurniture,
-    image_url: "/src/assets/generated/moldy-furniture.jpg",
+    image_url: "/src/assets/generated/moldy-furniture.webp",
     featured: false,
     is_featured: false,
   },

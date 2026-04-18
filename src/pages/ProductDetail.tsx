@@ -6,12 +6,12 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { applyProductSeoMeta, buildExcerpt } from "@/lib/seo";
 import { OptimizedImage, ResponsiveOptimizedImage } from "@/lib/vercel-image-optimization";
-import afraChair from "@/assets/products/afra-chair.jpg";
-import yolaChair from "@/assets/products/yola-chair.jpg";
-import landaChair from "@/assets/products/landa-chair.jpg";
-import briliyChair from "@/assets/products/briliy-chair.jpg";
-import yantamChair from "@/assets/products/yantam-chair.jpg";
-import gunawChair from "@/assets/products/gunaw-chair.jpg";
+import afraChair from '@/assets/products/afra-chair.webp';
+import yolaChair from '@/assets/products/yola-chair.webp';
+import landaChair from '@/assets/products/landa-chair.webp';
+import briliyChair from '@/assets/products/briliy-chair.webp';
+import yantamChair from '@/assets/products/yantam-chair.webp';
+import gunawChair from '@/assets/products/gunaw-chair.webp';
 
 type Product = {
   id: string;
@@ -524,11 +524,10 @@ const ProductDetail = () => {
             {related.map((item) => (
               <Link to={`/products/${item.slug}`} key={item.id} className="group">
                 <div className="relative overflow-hidden rounded-2xl mb-4 aspect-square bg-secondary">
-                  <img
+                  <OptimizedImage
                     src={item.images?.[0] || imageMap[item.slug] || afraChair}
                     alt={item.name}
                     className="w-full h-full object-contain p-6 group-hover:scale-110 transition-transform duration-300"
-                    loading="lazy"
                     width={250}
                     height={250}
                   />

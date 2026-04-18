@@ -1,4 +1,10 @@
 {
+  "images": {
+    "sizes": [200, 250, 400, 700, 800, 1024, 1200],
+    "domains": ["plokugmfybeumlyvefne.supabase.co"],
+    "formats": ["image/webp", "image/avif"],
+    "minimumCacheTTL": 2592000
+  },
   "rewrites": [
     {
       "source": "/products/:slug",

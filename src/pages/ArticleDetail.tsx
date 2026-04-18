@@ -4,9 +4,9 @@ import { Calendar, User, ArrowLeft, Share2, Copy, Check, Loader2 } from "lucide-
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import smallRoom from "@/assets/generated/small-room.jpg";
-import wallPaint from "@/assets/generated/wall-paint.jpg";
-import moldyFurniture from "@/assets/generated/moldy-furniture.jpg";
+import smallRoom from '@/assets/generated/small-room.webp';
+import wallPaint from '@/assets/generated/wall-paint.webp';
+import moldyFurniture from '@/assets/generated/moldy-furniture.webp';
 import { applyArticleSeoMeta, buildExcerpt, extractKeywords } from "@/lib/seo";
 
 type Article = {

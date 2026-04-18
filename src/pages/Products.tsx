@@ -12,13 +12,13 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { applyPageSeoMeta } from "@/lib/seo";
 import { OptimizedImage } from "@/lib/vercel-image-optimization";
-import productsHero from "@/assets/products-hero.jpg";
-import afraChair from "@/assets/products/afra-chair.jpg";
-import yolaChair from "@/assets/products/yola-chair.jpg";
-import landaChair from "@/assets/products/landa-chair.jpg";
-import briliyChair from "@/assets/products/briliy-chair.jpg";
-import yantamChair from "@/assets/products/yantam-chair.jpg";
-import gunawChair from "@/assets/products/gunaw-chair.jpg";
+import productsHero from '@/assets/products-hero.webp';
+import afraChair from '@/assets/products/afra-chair.webp';
+import yolaChair from '@/assets/products/yola-chair.webp';
+import landaChair from '@/assets/products/landa-chair.webp';
+import briliyChair from '@/assets/products/briliy-chair.webp';
+import yantamChair from '@/assets/products/yantam-chair.webp';
+import gunawChair from '@/assets/products/gunaw-chair.webp';
 
 // Fallback image map for products without images
 const fallbackImageMap: Record<string, string> = {

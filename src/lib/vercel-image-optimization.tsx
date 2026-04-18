@@ -46,9 +46,15 @@ export function getVercelOptimizedImageUrl(
 ): string {
   if (!src) return '';
   
-  // Return image URL as-is from Supabase
-  // Supabase CDN handles caching and delivery
-  // No need for /_vercel/image transformation
+  // Use Vercel Image Proxy API. This relies on the vercel.json "images" configuration.
+  const isDev = import.meta.env && import.meta.env.DEV;
+  if (!isDev) {
+    let url = `/_vercel/image?url=${encodeURIComponent(src)}`;
+    if (width) url += `&w=${width}`;
+    url += `&q=${quality}`;
+    return url;
+  }
+  
   return src;
 }
 
@@ -114,15 +120,17 @@ export function ResponsiveOptimizedImage({
     return null;
   }
 
-  // Use Supabase image URL directly
-  // Supabase CDN handles caching and delivery
   const optimizedSrc = getVercelOptimizedImageUrl(src, width);
+  
+  const srcSet = import.meta.env && import.meta.env.DEV 
+    ? undefined 
+    : `${getVercelOptimizedImageUrl(src, 400)} 400w, ${getVercelOptimizedImageUrl(src, 800)} 800w, ${getVercelOptimizedImageUrl(src, 1200)} 1200w`;
 
   return (
     <img
       src={optimizedSrc}
       alt={alt}
-      srcSet={`${optimizedSrc} 1x`}
+      srcSet={srcSet}
       sizes={sizes}
       width={width}
       height={height}
