@@ -164,7 +164,9 @@ const Index = () => {
                     alt={slide.title}
                     className="w-full h-full object-cover rounded-2xl" 
                     width={1920} 
-                    height={800} 
+                    height={800}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    loading={index === 0 ? "eager" : "lazy"}
                   />
                   <div className="hero-overlay rounded-2xl">
                     <div className="text-center">
@@ -185,6 +187,7 @@ const Index = () => {
 
       {/* Features Section */}
       <section className="section-container py-16">
+        <h2 className="font-serif text-4xl md:text-5xl text-center mb-12" data-aos="fade-up">Why Choose Aya Home Project</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             { icon: ShieldCheck, title: "Guaranteed Quality", desc: "Every Suar slab is kiln-dried, treated, and finished to international export standards with a 1-year warranty." },

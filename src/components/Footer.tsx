@@ -73,22 +73,22 @@ const Footer = () => {
             <div>
               <h3 className="font-sans font-semibold text-sm mb-3">Others</h3>
               <div className="flex flex-col gap-2 text-sm">
-                <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/" className="text-foreground hover:text-destructive transition-colors">
                   Home
                 </Link>
-                <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/about" className="text-foreground hover:text-destructive transition-colors">
                   About Us
                 </Link>
-                <Link to="/products" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/products" className="text-foreground hover:text-destructive transition-colors">
                   Products
                 </Link>
-                <Link to="/articles" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/articles" className="text-foreground hover:text-destructive transition-colors">
                   Articles
                 </Link>
-                <Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/contact" className="text-foreground hover:text-destructive transition-colors">
                   Contact
                 </Link>
-                <Link to="/why-us" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/why-us" className="text-foreground hover:text-destructive transition-colors">
                   Why Us
                 </Link>
               </div>
