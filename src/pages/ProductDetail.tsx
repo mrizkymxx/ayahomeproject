@@ -5,6 +5,7 @@ import { MessageCircle, Facebook, Twitter, Copy, Check, Loader2, Heart, Share2, 
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { applyProductSeoMeta, buildExcerpt } from "@/lib/seo";
+import { getOptimizedImageUrl, getImageSizes } from "@/lib/image-optimization";
 import afraChair from "@/assets/products/afra-chair.jpg";
 import yolaChair from "@/assets/products/yola-chair.jpg";
 import landaChair from "@/assets/products/landa-chair.jpg";
@@ -327,22 +328,30 @@ const ProductDetail = () => {
           {/* Left: Product Images */}
           <div>
             <div className="relative group">
-              <img 
-                src={images[selectedImageIndex]} 
-                alt={product.name} 
-                className="w-full rounded-2xl mb-6 cursor-pointer hover:opacity-90 transition-opacity shadow-lg bg-muted" 
-                width={700} 
-                height={700}
-                loading="lazy"
-                onError={(e) => {
-                  console.warn("Failed to load image:", images[selectedImageIndex]);
-                  setImageErrors(prev => ({ ...prev, [selectedImageIndex]: true }));
-                  // Fallback to first image or placeholder
-                  if (selectedImageIndex !== 0) {
-                    setSelectedImageIndex(0);
-                  }
-                }}
-              />
+              {/* WebP with JPG fallback for better compression */}
+              <picture>
+                <source 
+                  srcSet={getOptimizedImageUrl(images[selectedImageIndex], { format: 'webp', width: 700 }) || ''} 
+                  type="image/webp" 
+                />
+                <img 
+                  src={getOptimizedImageUrl(images[selectedImageIndex], { format: 'jpg', width: 700 }) || images[selectedImageIndex]} 
+                  alt={product.name} 
+                  className="w-full rounded-2xl mb-6 cursor-pointer hover:opacity-90 transition-opacity shadow-lg bg-muted" 
+                  width={700} 
+                  height={700}
+                  sizes={getImageSizes()}
+                  loading="lazy"
+                  onError={(e) => {
+                    console.warn("Failed to load image:", images[selectedImageIndex]);
+                    setImageErrors(prev => ({ ...prev, [selectedImageIndex]: true }));
+                    // Fallback to first image or placeholder
+                    if (selectedImageIndex !== 0) {
+                      setSelectedImageIndex(0);
+                    }
+                  }}
+                />
+              </picture>
               {imageErrors[selectedImageIndex] && (
                 <div className="absolute inset-0 rounded-2xl bg-muted flex items-center justify-center">
                   <div className="text-center">
@@ -375,7 +384,7 @@ const ProductDetail = () => {
                     }`}
                   >
                     <img 
-                      src={img} 
+                      src={getOptimizedImageUrl(img, { format: 'jpg', width: 200 }) || img}
                       alt={`${product.name} ${index + 1}`} 
                       className="w-full h-full object-cover hover:scale-105 transition-transform"
                       loading="lazy" 
@@ -528,14 +537,20 @@ const ProductDetail = () => {
             {related.map((item) => (
               <Link to={`/products/${item.slug}`} key={item.id} className="group">
                 <div className="relative overflow-hidden rounded-2xl mb-4 aspect-square bg-secondary">
-                  <img
-                    src={item.images?.[0] || imageMap[item.slug] || afraChair}
-                    alt={item.name}
-                    className="w-full h-full object-contain p-6 group-hover:scale-110 transition-transform duration-300"
-                    loading="lazy"
-                    width={250}
-                    height={250}
-                  />
+                  <picture>
+                    <source 
+                      srcSet={getOptimizedImageUrl(item.images?.[0] || imageMap[item.slug] || '', { format: 'webp', width: 250 }) || ''}
+                      type="image/webp"
+                    />
+                    <img
+                      src={getOptimizedImageUrl(item.images?.[0] || imageMap[item.slug] || '', { format: 'jpg', width: 250 }) || item.images?.[0] || imageMap[item.slug] || afraChair}
+                      alt={item.name}
+                      className="w-full h-full object-contain p-6 group-hover:scale-110 transition-transform duration-300"
+                      loading="lazy"
+                      width={250}
+                      height={250}
+                    />
+                  </picture>
                   {item.is_best_seller && (
                     <div className="absolute top-3 right-3 px-3 py-1 bg-orange-500/90 text-white text-xs font-bold rounded-full">
                       Best Seller
