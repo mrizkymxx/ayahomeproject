@@ -213,7 +213,7 @@ const Index = () => {
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
           Handcrafted live-edge Suar wood furniture, each piece showcasing the unique beauty of Trembesi grain.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8">
           {homeProducts.map((product, index) => (
             <Link 
               to={`/products/${product.slug}`}
@@ -368,7 +368,7 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
             {[
               { img: afraChair, name: "Live-Edge Dining Table", category: "Dining", badge: "Top Rated" },
               { img: yolaChair, name: "Round Coffee Table", category: "Living", badge: "Best Seller" },
