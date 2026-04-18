@@ -177,61 +177,65 @@ const Products = () => {
       </section>
 
       {/* Products Grid */}
-      <section className="section-container py-12">
-        {/* Search & Sort Bar - Sticky */}
-        <div className="sticky top-0 z-30 mb-8 p-4 md:p-6 bg-background border-b border-border/50 rounded-2xl shadow-sm">
-          <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
-            <div className="relative flex-1 md:flex-none md:w-96">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
-              <input
-                type="text"
-                placeholder="Search Suar wood products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background transition-all hover:border-foreground/50"
-              />
-            </div>
-            
-            {/* Mobile Category Dropdown */}
-            <div className="w-full md:hidden">
-              <select
-                value={activeCategory || ""}
-                onChange={(e) => {
-                  if (e.target.value) {
-                    setSearchParams({ category: e.target.value });
-                  } else {
-                    setSearchParams({});
-                  }
-                }}
-                className="w-full px-4 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring font-sans bg-background transition-all hover:border-foreground/50"
-              >
-                <option value="">All Products ({products.length})</option>
-                {categories.map((cat) => (
-                  <option key={cat.name} value={cat.name}>
-                    {cat.name} ({categoryCounts[cat.name] || 0})
-                  </option>
-                ))}
-              </select>
-            </div>
+      <section className="py-12">
+        {/* Search & Sort Bar - Sticky Full Width */}
+        <div className="sticky top-0 z-30 mb-8 bg-background border-b border-border/50">
+          <div className="section-container">
+            <div className="p-4 md:p-6 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+              <div className="relative flex-1 md:flex-none md:w-96">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search Suar wood products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background transition-all hover:border-foreground/50"
+                />
+              </div>
+              
+              {/* Mobile Category Dropdown */}
+              <div className="w-full md:hidden">
+                <select
+                  value={activeCategory || ""}
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      setSearchParams({ category: e.target.value });
+                    } else {
+                      setSearchParams({});
+                    }
+                  }}
+                  className="w-full px-4 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring font-sans bg-background transition-all hover:border-foreground/50"
+                >
+                  <option value="">All Products ({products.length})</option>
+                  {categories.map((cat) => (
+                    <option key={cat.name} value={cat.name}>
+                      {cat.name} ({categoryCounts[cat.name] || 0})
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <div className="flex items-center gap-3 w-full md:w-auto">
-              <SlidersHorizontal size={20} className="text-muted-foreground hidden md:block" />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="flex-1 md:flex-none px-4 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background transition-all hover:border-foreground/50"
-              >
-                <option value="name">Sort by Name</option>
-                <option value="newest">Newest First</option>
-                <option value="popular">Most Popular</option>
-              </select>
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                <SlidersHorizontal size={20} className="text-muted-foreground hidden md:block" />
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="flex-1 md:flex-none px-4 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background transition-all hover:border-foreground/50"
+                >
+                  <option value="name">Sort by Name</option>
+                  <option value="newest">Newest First</option>
+                  <option value="popular">Most Popular</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8">
-          {/* Categories Sidebar - Hidden on Mobile */}
-          <div className="hidden md:block">
+        {/* Products Content */}
+        <div className="section-container">
+          <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8">
+            {/* Categories Sidebar - Hidden on Mobile */}
+            <div className="hidden md:block">
             <div className="bg-gradient-to-b from-secondary/30 to-secondary/10 rounded-2xl p-4 border border-border/50">
               <h3 className="font-sans font-bold text-lg mb-4 text-foreground">
                 Categories
@@ -422,6 +426,7 @@ const Products = () => {
               </>
             )}
           </div>
+        </div>
         </div>
       </section>
     </Layout>
