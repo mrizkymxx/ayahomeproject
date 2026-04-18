@@ -94,81 +94,127 @@ const AboutUs = () => {
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section className="section-container py-16 bg-secondary">
-        <h2 className="font-serif text-5xl md:text-6xl text-center mb-4" data-aos="fade-up">Projects</h2>
-        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-          Our Suar wood installations bring warmth and character to spaces across the globe
-        </p>
+      {/* Projects Section - Showcase */}
+      <section className="section-container py-20 bg-secondary">
+        <div className="max-w-5xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-16" data-aos="fade-up">
+            <div className="inline-block px-3 py-1 bg-background rounded-full mb-4">
+              <span className="text-xs font-sans tracking-widest uppercase text-muted-foreground">Featured Projects</span>
+            </div>
+            <h2 className="font-serif text-5xl md:text-6xl mb-6 font-bold">Trusted By Leading Hospitality Brands</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              From boutique hotels in Bali to Michelin-featured restaurants worldwide, our Suar wood installations elevate luxury spaces with timeless craftsmanship and natural beauty.
+            </p>
+          </div>
 
-        <div className="mb-16" data-aos="fade-up" data-aos-delay="200">
-          <h3 className="font-serif text-xl text-center mb-6 italic">
-            Suar Wood Installations for Hotels & Resorts
-          </h3>
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={16}
-            slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 4000, disableOnInteraction: false }}
-            breakpoints={{
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-            }}
-            className="projects-swiper"
-          >
-            <SwiperSlide>
-              <div className="group overflow-hidden rounded-lg">
-                <img src={projectHosp01} alt="Suar Wood Hotel Reception Desk" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
+          {/* Hotels & Resorts */}
+          <div className="mb-20" data-aos="fade-up" data-aos-delay="100">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="h-px flex-1 bg-border"></div>
+              <div className="px-4 py-2 bg-background rounded-lg border border-border">
+                <h3 className="font-sans font-bold text-sm tracking-widest uppercase text-muted-foreground">
+                  Hotels & Resorts
+                </h3>
               </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="group overflow-hidden rounded-lg">
-                <img src={projectHosp02} alt="Suar Wood Resort Dining Table" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="group overflow-hidden rounded-lg">
-                <img src={projectHosp03} alt="Suar Wood Hotel Suite Furniture" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
-              </div>
-            </SwiperSlide>
-          </Swiper>
-        </div>
+              <div className="h-px flex-1 bg-border"></div>
+            </div>
+            <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Custom reception desks, dining tables, and lobby installations that define the hospitality experience
+            </p>
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={16}
+              slidesPerView={1}
+              navigation
+              pagination={{ clickable: true }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              breakpoints={{
+                640: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+              }}
+              className="projects-swiper"
+            >
+              {[
+                { src: projectHosp01, alt: "Luxury hotel reception desk with hand-selected Suar wood live-edge top and metal base", title: "Reception Desk" },
+                { src: projectHosp02, alt: "Resort dining installation featuring custom Suar wood table with integrated resin design", title: "Dining Installation" },
+                { src: projectHosp03, alt: "Hotel suite furniture showcasing premium Suar wood craftsmanship with natural grain patterns", title: "Suite Furniture" },
+              ].map((project, idx) => (
+                <SwiperSlide key={idx}>
+                  <div className="group overflow-hidden rounded-xl shadow-lg">
+                    <div className="relative w-full h-80">
+                      <img 
+                        src={project.src}
+                        alt={project.alt}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                        width={400}
+                        height={300}
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+                    </div>
+                    <div className="px-4 py-3 bg-background border-b border-border">
+                      <p className="text-sm font-sans font-semibold text-foreground">{project.title}</p>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
 
-        <div data-aos="fade-up" data-aos-delay="300">
-          <h3 className="font-serif text-xl text-center mb-6 italic">
-            Live-Edge Bar Tops & Tables for Restaurants Worldwide
-          </h3>
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={16}
-            slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 4000, disableOnInteraction: false }}
-            breakpoints={{
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-            }}
-            className="projects-swiper"
-          >
-            <SwiperSlide>
-              <div className="group overflow-hidden rounded-lg">
-                <img src={projectRest01} alt="Suar Wood Bar Counter" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
+          {/* Restaurants & Bars */}
+          <div data-aos="fade-up" data-aos-delay="200">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="h-px flex-1 bg-border"></div>
+              <div className="px-4 py-2 bg-background rounded-lg border border-border">
+                <h3 className="font-sans font-bold text-sm tracking-widest uppercase text-muted-foreground">
+                  Restaurants & Bars
+                </h3>
               </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="group overflow-hidden rounded-lg">
-                <img src={projectRest02} alt="Suar Wood Restaurant Tables" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="group overflow-hidden rounded-lg">
-                <img src={projectRest03} alt="Suar Wood Private Dining Table" className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" width={400} height={300} />
-              </div>
-            </SwiperSlide>
-          </Swiper>
+              <div className="h-px flex-1 bg-border"></div>
+            </div>
+            <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Statement bar tops, private dining tables, and signature installations for culinary destinations
+            </p>
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={16}
+              slidesPerView={1}
+              navigation
+              pagination={{ clickable: true }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              breakpoints={{
+                640: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+              }}
+              className="projects-swiper"
+            >
+              {[
+                { src: projectRest01, alt: "Premium bar counter crafted from single Suar wood slab with professional-grade finishing", title: "Bar Counter" },
+                { src: projectRest02, alt: "Restaurant private dining table in live-edge Suar wood with custom metalwork installation", title: "Dining Table" },
+                { src: projectRest03, alt: "Signature restaurant installation featuring exceptional Suar wood grain patterns and live-edge design", title: "Signature Installation" },
+              ].map((project, idx) => (
+                <SwiperSlide key={idx}>
+                  <div className="group overflow-hidden rounded-xl shadow-lg">
+                    <div className="relative w-full h-80">
+                      <img 
+                        src={project.src}
+                        alt={project.alt}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                        width={400}
+                        height={300}
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+                    </div>
+                    <div className="px-4 py-3 bg-background border-b border-border">
+                      <p className="text-sm font-sans font-semibold text-foreground">{project.title}</p>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
         </div>
       </section>
     </Layout>
