@@ -2,6 +2,13 @@ import Layout from "@/components/Layout";
 import { Link, useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { applyPageSeoMeta } from "@/lib/seo";
 import productsHero from "@/assets/products-hero.jpg";
@@ -179,10 +186,10 @@ const Products = () => {
       {/* Products Grid */}
       <section className="py-12 relative">
         {/* Sticky Filter Header - Below Navbar with Space */}
-        <div className="sticky top-24 z-40 bg-background/95 backdrop-blur-md border-b border-border/30 shadow-sm">
+        <div className="sticky top-32 z-40 bg-background/95 backdrop-blur-md border-b border-border/30 shadow-sm">
           <div className="section-container py-5 md:py-6">
             {/* Desktop Layout */}
-            <div className="hidden md:flex items-center gap-6 justify-between">
+            <div className="hidden md:flex items-center gap-4 justify-between">
               {/* Search */}
               <div className="relative flex-1 max-w-sm">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground pointer-events-none" size={18} />
@@ -196,45 +203,37 @@ const Products = () => {
               </div>
 
               {/* Category Dropdown */}
-              <div className="relative">
-                <select
-                  value={activeCategory || ""}
-                  onChange={(e) => {
-                    if (e.target.value) {
-                      setSearchParams({ category: e.target.value });
-                    } else {
-                      setSearchParams({});
-                    }
-                  }}
-                  className="appearance-none px-4 py-2.5 pr-10 text-sm font-medium border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background bg-background hover:border-foreground/40 transition-all cursor-pointer shadow-sm"
-                >
-                  <option value="">All Categories</option>
-                {categories.map((cat) => (
-                  <option key={cat.name} value={cat.name}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-                <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-              </div>
+              <Select value={activeCategory || ""} onValueChange={(value) => {
+                if (value) {
+                  setSearchParams({ category: value });
+                } else {
+                  setSearchParams({});
+                }
+              }}>
+                <SelectTrigger className="w-48 px-4 py-2.5 text-sm font-medium rounded-lg border-border bg-background hover:border-foreground/40 shadow-sm">
+                  <SelectValue placeholder="All Categories" />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  <SelectItem value="">All Categories</SelectItem>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat.name} value={cat.name}>
+                      {cat.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
               {/* Sort Dropdown */}
-              <div className="relative">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="appearance-none px-4 py-2.5 pr-10 text-sm font-medium border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background bg-background hover:border-foreground/40 transition-all cursor-pointer shadow-sm"
-                >
-                  <option value="name">Sort by Name</option>
-                  <option value="newest">Newest First</option>
-                  <option value="popular">Most Popular</option>
-                </select>
-                <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-              </div>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-40 px-4 py-2.5 text-sm font-medium rounded-lg border-border bg-background hover:border-foreground/40 shadow-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  <SelectItem value="name">Sort by Name</SelectItem>
+                  <SelectItem value="newest">Newest First</SelectItem>
+                  <SelectItem value="popular">Most Popular</SelectItem>
+                </SelectContent>
+              </Select>
 
               {/* Active Filter Indicator */}
               {(activeCategory || searchTerm) && (
@@ -267,45 +266,37 @@ const Products = () => {
               {/* Category & Sort Row */}
               <div className="grid grid-cols-2 gap-3">
                 {/* Category Dropdown */}
-                <div className="relative">
-                  <select
-                    value={activeCategory || ""}
-                    onChange={(e) => {
-                      if (e.target.value) {
-                        setSearchParams({ category: e.target.value });
-                      } else {
-                        setSearchParams({});
-                      }
-                    }}
-                    className="appearance-none w-full px-3 py-3 pr-8 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all font-medium cursor-pointer"
-                  >
-                    <option value="">All Categories</option>
+                <Select value={activeCategory || ""} onValueChange={(value) => {
+                  if (value) {
+                    setSearchParams({ category: value });
+                  } else {
+                    setSearchParams({});
+                  }
+                }}>
+                  <SelectTrigger className="w-full px-3 py-3 text-sm font-medium rounded-lg border-border bg-background/50 cursor-pointer">
+                    <SelectValue placeholder="Categories" />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-60">
+                    <SelectItem value="">All</SelectItem>
                     {categories.map((cat) => (
-                      <option key={cat.name} value={cat.name}>
+                      <SelectItem key={cat.name} value={cat.name}>
                         {cat.name}
-                      </option>
+                      </SelectItem>
                     ))}
-                  </select>
-                  <svg className="absolute right-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                  </svg>
-                </div>
+                  </SelectContent>
+                </Select>
 
                 {/* Sort Dropdown */}
-                <div className="relative">
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="appearance-none w-full px-3 py-3 pr-8 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all font-medium cursor-pointer"
-                  >
-                    <option value="name">Sort</option>
-                    <option value="newest">Newest</option>
-                    <option value="popular">Popular</option>
-                  </select>
-                  <svg className="absolute right-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                  </svg>
-                </div>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-full px-3 py-3 text-sm font-medium rounded-lg border-border bg-background/50 cursor-pointer">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-60">
+                    <SelectItem value="name">Sort</SelectItem>
+                    <SelectItem value="newest">Newest</SelectItem>
+                    <SelectItem value="popular">Popular</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
