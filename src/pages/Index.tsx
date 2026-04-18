@@ -355,30 +355,70 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Best Seller Section */}
-      <section className="bg-secondary py-16">
+      {/* Best Seller Section - Customer Favorites */}
+      <section className="bg-secondary py-20">
         <div className="section-container">
-          <h2 className="font-serif text-4xl md:text-5xl text-center mb-12" data-aos="fade-up">Best Seller Collection</h2>
+          <div className="text-center mb-16" data-aos="fade-up">
+            <div className="inline-block px-3 py-1 bg-background rounded-full mb-4">
+              <span className="text-xs font-sans tracking-widest uppercase text-muted-foreground">Customer Favorites</span>
+            </div>
+            <h2 className="font-serif text-5xl md:text-6xl mb-6 font-bold">Most-Loved Suar Pieces</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Discover the Suar wood furniture that our global clients choose most—proven favorites for homes, hotels, and restaurants seeking timeless quality.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { img: afraChair, name: "Suar Dining Table" },
-              { img: yolaChair, name: "Suar Coffee Table" },
-              { img: landaChair, name: "Suar Console Table" },
-              { img: briliyChair, name: "Suar Bar Top" },
+              { img: afraChair, name: "Live-Edge Dining Table", category: "Dining", badge: "🏆 Top Rated" },
+              { img: yolaChair, name: "Round Coffee Table", category: "Living", badge: "⭐ Best Seller" },
+              { img: landaChair, name: "Statement Console", category: "Entryway", badge: "✨ Most Popular" },
+              { img: briliyChair, name: "Premium Bar Top", category: "Hospitality", badge: "🔥 Trending" },
             ].map((product, index) => (
               <Link 
                 to="/products" 
                 key={product.name} 
-                className="group text-center"
+                className="group"
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
               >
-                <div className="bg-background rounded-xl overflow-hidden aspect-square flex items-center justify-center p-6 group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
-                  <img src={product.img} alt={product.name} className="max-h-full object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" width={300} height={300} />
+                <div className="relative overflow-hidden rounded-2xl mb-4">
+                  {/* Badge */}
+                  <div className="absolute top-3 left-3 px-2.5 py-1 bg-background/90 backdrop-blur-sm rounded-lg border border-border/50 z-10">
+                    <span className="text-xs font-semibold text-foreground">{product.badge}</span>
+                  </div>
+
+                  {/* Image */}
+                  <div className="bg-background aspect-square flex items-center justify-center p-8 group-hover:bg-muted transition-colors duration-300 overflow-hidden">
+                    <img 
+                      src={product.img} 
+                      alt={product.name} 
+                      className="max-h-full object-contain group-hover:scale-125 transition-transform duration-500" 
+                      loading="lazy" 
+                      width={300} 
+                      height={300} 
+                    />
+                  </div>
                 </div>
-                <p className="mt-4 font-serif text-base italic">{product.name}</p>
+
+                {/* Content */}
+                <div className="text-center">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold mb-2">{product.category}</p>
+                  <p className="font-serif text-lg font-semibold group-hover:text-primary transition-colors mb-3 line-clamp-2">{product.name}</p>
+                  <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    View Details →
+                  </p>
+                </div>
               </Link>
             ))}
+          </div>
+
+          {/* CTA */}
+          <div className="text-center mt-16">
+            <Link to="/products" className="inline-flex items-center gap-2 px-8 py-3 border-2 border-foreground font-sans text-sm tracking-wider uppercase hover:bg-foreground hover:text-background transition-colors">
+              Explore Complete Collection
+              <span>→</span>
+            </Link>
           </div>
         </div>
       </section>
