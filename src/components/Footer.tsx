@@ -62,10 +62,10 @@ const Footer = () => {
               <h4 className="font-sans font-semibold text-sm mb-3">Our Workshop</h4>
               <div className="text-sm text-muted-foreground space-y-1 leading-6">
                 <p className="font-semibold text-foreground">Aya Home Project</p>
-                <p>Sidomulyo Street, RT 5 RW 3</p>
-                <p>Langon Village, Tahunan District</p>
-                <p>Jepara Regency 59452</p>
-                <p>Central Java, Indonesia</p>
+                <p>Serogenen, Pekalongan</p>
+                <p>Batealit, Jepara Regency</p>
+                <p>Central Java 59461</p>
+                <p>Indonesia</p>
                 <p className="pt-2 text-xs">International inquiries are welcome.</p>
               </div>
             </div>

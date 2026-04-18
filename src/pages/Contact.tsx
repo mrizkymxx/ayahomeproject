@@ -71,10 +71,10 @@ const Contact = () => {
             </div>
             <h3 className="font-sans font-bold mb-2">Visit Our Workshop</h3>
             <p className="text-sm text-muted-foreground">
-              Sidomulyo Street, RT 5 RW 3<br />
-              Langon Village, Tahunan District<br />
-              Jepara Regency 59452<br />
-              Central Java, Indonesia
+              Serogenen, Pekalongan<br />
+              Batealit, Jepara Regency<br />
+              Central Java 59461<br />
+              Indonesia
             </p>
           </div>
 
