@@ -45,41 +45,64 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [related, setRelated] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [canShare] = useState(() => typeof navigator !== 'undefined' && !!navigator.share);
+  const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     async function fetchData() {
       if (!slug) {
+        setError("Product not found");
         setLoading(false);
         return;
       }
 
       setLoading(true);
-      const { data, error } = await supabase
-        .from("products")
-        .select("*, category:categories(id,name,slug)")
-        .eq("slug", slug)
-        .single();
+      setError(null);
+      
+      try {
+        const { data, error: queryError } = await supabase
+          .from("products")
+          .select("*, category:categories(id,name,slug)")
+          .eq("slug", slug)
+          .single();
 
-      if (error || !data) {
+        if (queryError || !data) {
+          console.warn("Product fetch error:", queryError?.message || "No data returned");
+          setProduct(null);
+          setError("Product not found. Please check the product name or try again.");
+          setLoading(false);
+          return;
+        }
+
+        setProduct(data as Product);
+        setError(null);
+
+        // Fetch related products
+        try {
+          const { data: relatedRows, error: relatedError } = await supabase
+            .from("products")
+            .select("*, category:categories(id,name,slug)")
+            .eq("category_id", data.category_id)
+            .neq("id", data.id)
+            .limit(8);
+
+          if (!relatedError) {
+            setRelated((relatedRows || []) as Product[]);
+          }
+        } catch (relErr) {
+          console.warn("Related products fetch error:", relErr);
+          setRelated([]);
+        }
+      } catch (err) {
+        console.error("Error fetching product:", err);
         setProduct(null);
+        setError("Failed to load product. Please try again.");
+      } finally {
         setLoading(false);
-        return;
       }
-
-      setProduct(data as Product);
-
-      const { data: relatedRows } = await supabase
-        .from("products")
-        .select("*, category:categories(id,name,slug)")
-        .eq("category_id", data.category_id)
-        .neq("id", data.id)
-        .limit(8);
-
-      setRelated((relatedRows || []) as Product[]);
-      setLoading(false);
     }
 
     fetchData();
@@ -224,15 +247,52 @@ const ProductDetail = () => {
     );
   }
 
-  if (!product) {
+  if (error || !product) {
     return (
       <Layout>
-        <div className="section-container py-20 text-center">
-          <h1 className="font-serif text-3xl">Product not found</h1>
-          <Link to="/products" className="mt-4 inline-block text-muted-foreground underline">
-            Back to Products
-          </Link>
-        </div>
+        <section className="section-container py-16">
+          <nav className="mb-6 text-sm text-muted-foreground" aria-label="Breadcrumb">
+            <ol className="flex items-center gap-2">
+              <li>
+                <Link to="/" className="hover:text-foreground transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>/</li>
+              <li>
+                <Link to="/products" className="hover:text-foreground transition-colors">
+                  Products
+                </Link>
+              </li>
+              <li>/</li>
+              <li className="text-foreground font-semibold">Error</li>
+            </ol>
+          </nav>
+          
+          <div className="text-center py-12">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-500/10 mb-6">
+              <Search size={40} className="text-red-500" />
+            </div>
+            <h1 className="font-serif text-4xl font-bold mb-3 text-foreground">Product Not Found</h1>
+            <p className="text-lg text-muted-foreground mb-6 max-w-md mx-auto">
+              {error || "The product you're looking for doesn't exist or has been removed."}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                to="/products" 
+                className="px-8 py-3 bg-foreground text-background rounded-lg font-semibold hover:bg-foreground/90 transition-colors inline-block"
+              >
+                Browse Products
+              </Link>
+              <Link 
+                to="/" 
+                className="px-8 py-3 border-2 border-foreground rounded-lg font-semibold hover:bg-foreground hover:text-background transition-colors inline-block"
+              >
+                Back Home
+              </Link>
+            </div>
+          </div>
+        </section>
       </Layout>
     );
   }
@@ -270,16 +330,32 @@ const ProductDetail = () => {
               <img 
                 src={images[selectedImageIndex]} 
                 alt={product.name} 
-                className="w-full rounded-2xl mb-6 cursor-pointer hover:opacity-90 transition-opacity shadow-lg" 
+                className="w-full rounded-2xl mb-6 cursor-pointer hover:opacity-90 transition-opacity shadow-lg bg-muted" 
                 width={700} 
-                height={700} 
+                height={700}
+                onError={(e) => {
+                  console.warn("Failed to load image:", images[selectedImageIndex]);
+                  setImageErrors(prev => ({ ...prev, [selectedImageIndex]: true }));
+                  // Fallback to first image or placeholder
+                  if (selectedImageIndex !== 0) {
+                    setSelectedImageIndex(0);
+                  }
+                }}
               />
+              {imageErrors[selectedImageIndex] && (
+                <div className="absolute inset-0 rounded-2xl bg-muted flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-muted-foreground mb-2">📷</div>
+                    <p className="text-sm text-muted-foreground">Image unavailable</p>
+                  </div>
+                </div>
+              )}
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(window.location.href);
                   toast({ title: "Link copied!", description: "Product link copied to clipboard" });
                 }}
-                className="absolute top-4 right-4 bg-white/90 backdrop-blur hover:bg-white rounded-full p-3 transition-all shadow-lg"
+                className="absolute top-4 right-4 bg-white/90 dark:bg-background/90 backdrop-blur hover:bg-white dark:hover:bg-background rounded-full p-3 transition-all shadow-lg"
               >
                 <Heart size={20} className="text-foreground" />
               </button>
@@ -291,13 +367,25 @@ const ProductDetail = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`rounded-xl w-full h-24 overflow-hidden border-2 transition-all cursor-pointer ${
+                    className={`rounded-xl w-full h-24 overflow-hidden border-2 transition-all cursor-pointer relative bg-muted ${
                       selectedImageIndex === index
                         ? 'border-foreground shadow-lg'
                         : 'border-border hover:border-foreground/50'
                     }`}
                   >
-                    <img src={img} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform" />
+                    <img 
+                      src={img} 
+                      alt={`${product.name} ${index + 1}`} 
+                      className="w-full h-full object-cover hover:scale-105 transition-transform" 
+                      onError={(e) => {
+                        setImageErrors(prev => ({ ...prev, [index]: true }));
+                      }}
+                    />
+                    {imageErrors[index] && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-muted text-xs text-muted-foreground">
+                        No image
+                      </div>
+                    )}
                   </button>
                 ))}
               </div>
@@ -333,7 +421,7 @@ const ProductDetail = () => {
             {/* Main CTA - WhatsApp Order Button */}
             <button
               onClick={() => handleShare("whatsapp")}
-              className="w-full mb-6 px-6 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 group"
+              className="w-full mb-6 px-6 py-4 sm:py-5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 group min-h-[48px]"
             >
               <MessageCircle size={22} className="group-hover:animate-bounce" />
               <span>Order via WhatsApp</span>
@@ -342,15 +430,15 @@ const ProductDetail = () => {
             {/* Share Section */}
             <div className="mb-8 pb-8 border-b border-border/30">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Share this product</p>
-              <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 {/* Native Share Button (iPhone/Android style) */}
                 {canShare && (
                   <button
                     onClick={handleNativeShare}
-                    className="flex-1 md:flex-none px-4 py-2.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 border border-blue-300/50 hover:border-blue-400 text-blue-700 rounded-lg transition-all flex items-center justify-center gap-2 group font-semibold"
+                    className="flex-1 sm:flex-none px-3 sm:px-4 py-3 bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 border border-blue-300/50 hover:border-blue-400 text-blue-700 rounded-lg transition-all flex items-center justify-center gap-2 group font-semibold min-h-[44px]"
                     title="Share using system share sheet"
                   >
-                    <Share2 size={18} className="group-hover:scale-110 transition-transform" />
+                    <Share2 size={18} className="group-hover:scale-110 transition-transform flex-shrink-0" />
                     <span className="text-sm font-medium">Share</span>
                   </button>
                 )}
@@ -358,17 +446,17 @@ const ProductDetail = () => {
                 {/* Copy Link */}
                 <button 
                   onClick={handleCopyLink}
-                  className="flex-1 md:flex-none px-4 py-2.5 bg-muted/30 hover:bg-muted/50 border border-border rounded-lg transition-all flex items-center justify-center gap-2 group"
+                  className="flex-1 sm:flex-none px-3 sm:px-4 py-3 bg-muted/30 hover:bg-muted/50 border border-border rounded-lg transition-all flex items-center justify-center gap-2 group min-h-[44px]"
                   title="Copy link to clipboard"
                 >
                   {copied ? (
                     <>
-                      <Check size={18} className="text-green-600" />
+                      <Check size={18} className="text-green-600 flex-shrink-0" />
                       <span className="text-sm font-medium text-green-600">Copied</span>
                     </>
                   ) : (
                     <>
-                      <Copy size={18} className="group-hover:scale-110 transition-transform" />
+                      <Copy size={18} className="group-hover:scale-110 transition-transform flex-shrink-0" />
                       <span className="text-sm font-medium">Copy</span>
                     </>
                   )}

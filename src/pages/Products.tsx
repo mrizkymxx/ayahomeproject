@@ -260,42 +260,52 @@ const Products = () => {
                   placeholder="Search products..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all"
+                  className="w-full pl-10 pr-4 py-3 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all"
                 />
               </div>
 
               {/* Category & Sort Row */}
               <div className="grid grid-cols-2 gap-3">
                 {/* Category Dropdown */}
-                <select
-                  value={activeCategory || ""}
-                  onChange={(e) => {
-                    if (e.target.value) {
-                      setSearchParams({ category: e.target.value });
-                    } else {
-                      setSearchParams({});
-                    }
-                  }}
-                  className="px-3 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all font-medium"
-                >
-                  <option value="">All Categories</option>
-                  {categories.map((cat) => (
-                    <option key={cat.name} value={cat.name}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={activeCategory || ""}
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        setSearchParams({ category: e.target.value });
+                      } else {
+                        setSearchParams({});
+                      }
+                    }}
+                    className="appearance-none w-full px-3 py-3 pr-8 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all font-medium cursor-pointer"
+                  >
+                    <option value="">All Categories</option>
+                    {categories.map((cat) => (
+                      <option key={cat.name} value={cat.name}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                  <svg className="absolute right-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </div>
 
                 {/* Sort Dropdown */}
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="px-3 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all font-medium"
-                >
-                  <option value="name">Sort</option>
-                  <option value="newest">Newest</option>
-                  <option value="popular">Popular</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="appearance-none w-full px-3 py-3 pr-8 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all font-medium cursor-pointer"
+                  >
+                    <option value="name">Sort</option>
+                    <option value="newest">Newest</option>
+                    <option value="popular">Popular</option>
+                  </select>
+                  <svg className="absolute right-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
