@@ -65,15 +65,22 @@ const Products = () => {
         // Fetch categories
         const { data: catsData, error: catsError } = await supabase
           .from('categories')
-          .select('*')
+          .select('id, name, slug')
           .order('name');
 
-        // Fetch products with category relation
+        // Fetch products WITHOUT category join (simpler, more reliable)
         const { data: prodsData, error: prodsError } = await supabase
           .from('products')
           .select(`
-            *,
-            category:categories(id, name, slug)
+            id,
+            name,
+            slug,
+            category_id,
+            images,
+            is_featured,
+            is_best_seller,
+            stock_status,
+            created_at
           `)
           .order('created_at', { ascending: false })
           .order('id', { ascending: false });
@@ -85,9 +92,19 @@ const Products = () => {
           setUsingFallback(true);
         } else {
           setCategories(catsData || []);
-          setProducts(prodsData || []);
+          
+          // Enrich products with category data (merge at client)
+          const enrichedProducts = (prodsData || []).map((prod: any) => {
+            const category = catsData?.find(cat => cat.id === prod.category_id);
+            return {
+              ...prod,
+              category: category ? { id: category.id, name: category.name, slug: category.slug } : null,
+            };
+          });
+          
+          setProducts(enrichedProducts);
           setUsingFallback(false);
-          console.log('✅ Loaded from Supabase:', { categories: catsData?.length, products: prodsData?.length });
+          console.log('✅ Loaded from Supabase:', { categories: catsData?.length, products: enrichedProducts.length });
         }
       } catch (error) {
         console.error('Error fetching data:', error);

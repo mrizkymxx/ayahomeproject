@@ -83,15 +83,30 @@ const ProductDetail = () => {
 
         // Fetch related products
         try {
-          const { data: relatedRows, error: relatedError } = await supabase
-            .from("products")
-            .select("*, category:categories(id,name,slug)")
-            .eq("category_id", data.category_id)
-            .neq("id", data.id)
-            .limit(8);
+          if (data.category_id) {
+            // Only fetch related if product has a category
+            const { data: relatedRows, error: relatedError } = await supabase
+              .from("products")
+              .select("id, name, slug, images, is_featured, is_best_seller, category_id")
+              .eq("category_id", data.category_id)
+              .neq("id", data.id)
+              .limit(8);
 
-          if (!relatedError) {
-            setRelated((relatedRows || []) as Product[]);
+            if (!relatedError && relatedRows) {
+              setRelated(relatedRows as Product[]);
+            }
+          } else {
+            // Fallback: get any recent products if no category
+            const { data: recentRows } = await supabase
+              .from("products")
+              .select("id, name, slug, images, is_featured, is_best_seller, category_id")
+              .neq("id", data.id)
+              .order("created_at", { ascending: false })
+              .limit(8);
+            
+            if (recentRows) {
+              setRelated(recentRows as Product[]);
+            }
           }
         } catch (relErr) {
           console.warn("Related products fetch error:", relErr);
