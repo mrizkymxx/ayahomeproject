@@ -176,9 +176,10 @@ const Products = () => {
         </div>
       </section>
 
-      {/* Search & Sort Bar - Fixed Sticky Header */}
-      <div className="fixed top-16 left-0 right-0 z-40 px-4 md:px-8 py-4 bg-background/95 backdrop-blur border-b border-border/50">
-        <div className="max-w-7xl mx-auto">
+      {/* Products Grid */}
+      <section className="section-container py-12">
+        {/* Search & Sort Bar */}
+        <div className="mb-8 p-4 md:p-6 bg-gradient-to-r from-secondary/50 to-secondary/30 rounded-2xl border border-border/50 backdrop-blur-sm">
           <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
             <div className="relative flex-1 md:flex-none md:w-96">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
@@ -227,15 +228,11 @@ const Products = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Products Grid */}
-      <section className="section-container py-12 pt-32 md:pt-28">
 
         <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8">
           {/* Categories Sidebar - Hidden on Mobile */}
           <div className="hidden md:block">
-            <div className="bg-gradient-to-b from-secondary/30 to-secondary/10 rounded-xl p-4 border border-border/50 sticky top-4">
+            <div className="bg-gradient-to-b from-secondary/30 to-secondary/10 rounded-2xl p-4 border border-border/50">
               <h3 className="font-sans font-bold text-lg mb-4 text-foreground">
                 Categories
               </h3>
