@@ -177,24 +177,69 @@ const Products = () => {
       </section>
 
       {/* Products Grid */}
-      <section className="py-12">
-        {/* Search & Sort Bar - Sticky Full Width */}
-        <div className="sticky top-0 z-30 mb-8 bg-background border-b border-border/50">
-          <div className="section-container">
-            <div className="p-4 md:p-6 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
-              <div className="relative flex-1 md:flex-none md:w-96">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
+      <section className="py-12 relative">
+        {/* Sticky Filter Header */}
+        <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/30 shadow-sm">
+          <div className="section-container py-4 md:py-5">
+            {/* Desktop Layout */}
+            <div className="hidden md:flex items-center gap-6 justify-between">
+              {/* Search */}
+              <div className="relative flex-1 max-w-sm">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground pointer-events-none" size={18} />
                 <input
                   type="text"
-                  placeholder="Search Suar wood products..."
+                  placeholder="Search products..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background transition-all hover:border-foreground/50"
+                  className="w-full pl-10 pr-4 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all hover:border-foreground/30 focus:border-foreground/50"
                 />
               </div>
-              
-              {/* Mobile Category Dropdown */}
-              <div className="w-full md:hidden">
+
+              {/* Sort */}
+              <div className="flex items-center gap-2">
+                <SlidersHorizontal size={16} className="text-muted-foreground flex-shrink-0" />
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-3 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all hover:border-foreground/30 font-medium"
+                >
+                  <option value="name">Sort by Name</option>
+                  <option value="newest">Newest First</option>
+                  <option value="popular">Most Popular</option>
+                </select>
+              </div>
+
+              {/* Active Filter Indicator */}
+              {(activeCategory || searchTerm) && (
+                <button
+                  onClick={() => {
+                    setSearchTerm("");
+                    setSearchParams({});
+                  }}
+                  className="text-xs font-medium text-destructive hover:text-destructive/80 transition-colors px-3 py-2 rounded-md hover:bg-destructive/10"
+                >
+                  Clear Filters
+                </button>
+              )}
+            </div>
+
+            {/* Mobile Layout */}
+            <div className="md:hidden space-y-3">
+              {/* Search Bar */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground pointer-events-none" size={18} />
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all"
+                />
+              </div>
+
+              {/* Category & Sort Row */}
+              <div className="grid grid-cols-2 gap-3">
+                {/* Category Dropdown */}
                 <select
                   value={activeCategory || ""}
                   onChange={(e) => {
@@ -204,27 +249,25 @@ const Products = () => {
                       setSearchParams({});
                     }
                   }}
-                  className="w-full px-4 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring font-sans bg-background transition-all hover:border-foreground/50"
+                  className="px-3 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all font-medium"
                 >
-                  <option value="">All Products ({products.length})</option>
+                  <option value="">All Categories</option>
                   {categories.map((cat) => (
                     <option key={cat.name} value={cat.name}>
-                      {cat.name} ({categoryCounts[cat.name] || 0})
+                      {cat.name}
                     </option>
                   ))}
                 </select>
-              </div>
 
-              <div className="flex items-center gap-3 w-full md:w-auto">
-                <SlidersHorizontal size={20} className="text-muted-foreground hidden md:block" />
+                {/* Sort Dropdown */}
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="flex-1 md:flex-none px-4 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background transition-all hover:border-foreground/50"
+                  className="px-3 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all font-medium"
                 >
-                  <option value="name">Sort by Name</option>
-                  <option value="newest">Newest First</option>
-                  <option value="popular">Most Popular</option>
+                  <option value="name">Sort</option>
+                  <option value="newest">Newest</option>
+                  <option value="popular">Popular</option>
                 </select>
               </div>
             </div>
@@ -232,89 +275,74 @@ const Products = () => {
         </div>
 
         {/* Products Content */}
-        <div className="section-container">
+        <div className="section-container py-8">
           <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8">
-            {/* Categories Sidebar - Hidden on Mobile */}
+            {/* Desktop Categories Sidebar */}
             <div className="hidden md:block">
-            <div className="bg-gradient-to-b from-secondary/30 to-secondary/10 rounded-2xl p-4 border border-border/50">
-              <h3 className="font-sans font-bold text-lg mb-4 text-foreground">
-                Categories
-              </h3>
-              
-              {/* Category Search - Only show if many categories */}
-              {categories.length > 8 && (
-                <div className="mb-4">
-                  <input
-                    type="text"
-                    placeholder="Search categories..."
-                    value={categorySearch}
-                    onChange={(e) => setCategorySearch(e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background transition-all hover:border-foreground/50"
-                  />
-                </div>
-              )}
+              <div className="bg-gradient-to-b from-secondary/20 to-secondary/5 rounded-lg p-4 border border-border/30">
+                <h3 className="font-sans font-semibold text-sm uppercase tracking-wide text-foreground mb-4">
+                  Categories
+                </h3>
+                
+                {/* Category Search */}
+                {categories.length > 8 && (
+                  <div className="mb-4">
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      value={categorySearch}
+                      onChange={(e) => setCategorySearch(e.target.value)}
+                      className="w-full px-3 py-2 text-xs border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all"
+                    />
+                  </div>
+                )}
 
-              {/* Scrollable Category List */}
-              <div className={`space-y-2 ${categories.length > 10 ? 'max-h-96 overflow-y-auto pr-2 scrollbar-thin' : ''}`}>
-                {/* All Products Button */}
-                <button
-                  onClick={() => setSearchParams({})}
-                  className={`text-sm font-sans font-medium transition-all w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between group ${
-                    activeCategory === null
-                      ? "bg-foreground text-background font-bold shadow-md"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/80 border border-transparent hover:border-foreground/20"
-                  }`}
-                >
-                  <span className="flex items-center gap-2">
-                    All Products
-                  </span>
-                  <span className={`text-xs font-bold ${activeCategory === null ? 'text-background/70' : 'text-muted-foreground group-hover:text-foreground'}`}>
-                    {products.length}
-                  </span>
-                </button>
+                {/* Category List */}
+                <div className={`space-y-1.5 ${categories.length > 10 ? 'max-h-96 overflow-y-auto pr-2 scrollbar-thin' : ''}`}>
+                  <button
+                    onClick={() => setSearchParams({})}
+                    className={`w-full text-left px-3 py-2 text-sm rounded-md transition-all font-medium flex items-center justify-between ${
+                      activeCategory === null
+                        ? "bg-foreground text-background"
+                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/30"
+                    }`}
+                  >
+                    <span>All Products</span>
+                    <span className="text-xs font-bold">{products.length}</span>
+                  </button>
 
-                {filteredCategories.length === 0 ? (
-                  <p className="text-sm text-muted-foreground italic py-2">No categories found</p>
-                ) : (
-                  filteredCategories.map((cat, idx) => (
+                  {filteredCategories.map((cat) => (
                     <button
-                      key={cat.id || cat.slug || cat.name}
+                      key={cat.name}
                       onClick={() => setSearchParams({ category: cat.name })}
-                      className={`text-sm font-sans font-medium transition-all w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between group ${
+                      className={`w-full text-left px-3 py-2 text-sm rounded-md transition-all font-medium flex items-center justify-between ${
                         activeCategory === cat.name
-                          ? "bg-foreground text-background font-bold shadow-md"
-                          : "text-muted-foreground hover:text-foreground hover:bg-secondary/80 border border-transparent hover:border-foreground/20"
+                          ? "bg-foreground text-background"
+                          : "text-muted-foreground hover:text-foreground hover:bg-secondary/30"
                       }`}
                     >
-                      <span className="flex items-center gap-2 flex-1 min-w-0">
-                        <span className="truncate">{cat.name}</span>
-                      </span>
-                      <span className={`text-xs font-bold ml-2 flex-shrink-0 ${activeCategory === cat.name ? 'text-background/70' : 'text-muted-foreground group-hover:text-foreground'}`}>
-                        {categoryCounts[cat.name] || 0}
-                      </span>
+                      <span className="truncate">{cat.name}</span>
+                      <span className="text-xs font-bold ml-2 flex-shrink-0">{categoryCounts[cat.name] || 0}</span>
                     </button>
-                  ))
-                )}
+                  ))}
+                </div>
+
+                {/* CTA Box */}
+                <div className="mt-6 pt-4 border-t border-border/30">
+                  <p className="text-xs font-semibold text-foreground mb-2">Custom Slab?</p>
+                  <p className="text-xs text-muted-foreground mb-3">Contact for custom dimensions.</p>
+                  <Link 
+                    to="/contact" 
+                    className="inline-text text-xs font-bold text-destructive hover:text-destructive/80 transition-colors"
+                  >
+                    Get in Touch →
+                  </Link>
+                </div>
               </div>
             </div>
 
-            {/* Contact CTA */}
-            <div className="mt-6 p-4 bg-gradient-to-br from-destructive/10 to-orange-500/10 rounded-xl border border-destructive/20">
-              <p className="text-sm font-sans font-bold mb-2 text-foreground">
-                Custom Slab?
-              </p>
-              <p className="text-xs text-muted-foreground mb-3">Contact us for custom Suar wood slabs, special dimensions, and bulk orders.</p>
-              <Link 
-                to="/contact" 
-                className="inline-flex items-center text-xs font-bold text-destructive hover:text-destructive/80 transition-colors group"
-              >
-                Get in Touch <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
-              </Link>
-            </div>
-          </div>
-
-          {/* Products Grid */}
-          <div>
+            {/* Products Grid */}
+            <div>
             {loading ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="animate-spin" size={40} />
