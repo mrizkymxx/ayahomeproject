@@ -179,7 +179,7 @@ const Products = () => {
       {/* Products Grid */}
       <section className="py-12 relative">
         {/* Sticky Filter Header - Below Navbar with Space */}
-        <div className="sticky top-20 z-40 bg-background/95 backdrop-blur-md border-b border-border/30 shadow-sm">
+        <div className="sticky top-24 z-40 bg-background/95 backdrop-blur-md border-b border-border/30 shadow-sm">
           <div className="section-container py-5 md:py-6">
             {/* Desktop Layout */}
             <div className="hidden md:flex items-center gap-6 justify-between">
