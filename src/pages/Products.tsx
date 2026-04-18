@@ -195,6 +195,26 @@ const Products = () => {
                 />
               </div>
 
+              {/* Category */}
+              <select
+                value={activeCategory || ""}
+                onChange={(e) => {
+                  if (e.target.value) {
+                    setSearchParams({ category: e.target.value });
+                  } else {
+                    setSearchParams({});
+                  }
+                }}
+                className="px-3 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all hover:border-foreground/30 font-medium"
+              >
+                <option value="">All Categories</option>
+                {categories.map((cat) => (
+                  <option key={cat.name} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+
               {/* Sort */}
               <div className="flex items-center gap-2">
                 <SlidersHorizontal size={16} className="text-muted-foreground flex-shrink-0" />
