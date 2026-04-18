@@ -475,6 +475,9 @@ const Products = () => {
                     const isFeatured = product.is_featured;
                     const isBestSeller = product.is_best_seller;
                     
+                    // First 6 products should load with priority (above fold on mobile/desktop)
+                    const shouldPriority = index < 6;
+                    
                     return (
                       <Link
                         to={`/products/${productSlug}`}
@@ -491,6 +494,7 @@ const Products = () => {
                               alt={product.name}
                               width={400}
                               height={400}
+                              priority={shouldPriority}
                               className="max-h-full object-contain group-hover:scale-110 transition-transform duration-300"
                             />
                             
