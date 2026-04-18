@@ -20,6 +20,16 @@ import briliyChair from "@/assets/products/briliy-chair.jpg";
 import yantamChair from "@/assets/products/yantam-chair.jpg";
 import gunawChair from "@/assets/products/gunaw-chair.jpg";
 
+// Fallback image map for products without images
+const fallbackImageMap: Record<string, string> = {
+  "afra-chair": afraChair,
+  "yola-chair": yolaChair,
+  "landa-chair": landaChair,
+  "briliy-chair": briliyChair,
+  "yantam-chair": yantamChair,
+  "gunaw-chair": gunawChair,
+};
+
 // Fallback hardcoded data
 const hardcodedCategories = ["Dining Table", "Coffee Table", "Console Table", "Bar Top", "Bench", "Conference Table"];
 const hardcodedProducts = [
@@ -445,7 +455,22 @@ const Products = () => {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {filteredProducts.map((product, index) => {
-                    const productImage = usingFallback ? product.image : (product.images?.[0] || afraChair);
+                    // Get product image with proper fallback
+                    let productImage = afraChair; // Default fallback
+                    
+                    if (usingFallback) {
+                      // Using hardcoded data - use image property
+                      productImage = (product as any).image || afraChair;
+                    } else {
+                      // Using Supabase data - check images array or slug map
+                      if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+                        productImage = product.images[0]; // Use first image from Supabase
+                      } else {
+                        // Fallback to image map based on slug
+                        productImage = fallbackImageMap[product.slug] || afraChair;
+                      }
+                    }
+                    
                     const productSlug = product.slug || product.id;
                     const isFeatured = product.is_featured;
                     const isBestSeller = product.is_best_seller;

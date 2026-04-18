@@ -313,7 +313,9 @@ const ProductDetail = () => {
     );
   }
 
-  const images = product.images && product.images.length > 0 ? product.images : [imageMap[product.slug] || afraChair];
+  const images = product.images && product.images.length > 0 
+    ? product.images 
+    : [imageMap[product.slug] || afraChair];
   const specs = product.specifications || {};
   const tags = [product.is_featured ? "FEATURED" : "", product.is_best_seller ? "BEST SELLER" : ""].filter(Boolean);
   const stockLabel = product.stock_status || "available";

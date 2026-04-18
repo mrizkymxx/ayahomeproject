@@ -36,8 +36,8 @@ interface OptimizedImageProps {
 /**
  * Generate Vercel image optimization URL
  * 
- * This transforms any image URL through Vercel's edge network
- * for automatic WebP conversion, resizing, and caching
+ * Returns image URL directly from Supabase storage
+ * Supabase handles caching and delivery via CDN
  */
 export function getVercelOptimizedImageUrl(
   src: string,
@@ -46,19 +46,10 @@ export function getVercelOptimizedImageUrl(
 ): string {
   if (!src) return '';
   
-  // If already optimized or relative path, return as-is
-  if (src.includes('_vercel') || !src.startsWith('http')) {
-    return src;
-  }
-
-  // Build Vercel image optimization URL
-  const params = new URLSearchParams();
-  params.append('url', src);
-  params.append('w', (width || 800).toString());
-  params.append('q', quality.toString());
-
-  // Use Vercel's image optimization endpoint
-  return `/_vercel/image?${params.toString()}`;
+  // Return image URL as-is from Supabase
+  // Supabase CDN handles caching and delivery
+  // No need for /_vercel/image transformation
+  return src;
 }
 
 /**
@@ -110,12 +101,6 @@ export function OptimizedImage({
   );
 }
 
-/**
- * Picture Element for Advanced Responsive Images
- * 
- * Provides srcset for different sizes
- * Supports device pixel ratios
- */
 export function ResponsiveOptimizedImage({
   src,
   alt,
@@ -129,49 +114,32 @@ export function ResponsiveOptimizedImage({
     return null;
   }
 
-  // Generate srcset with multiple sizes
-  const widths = [400, 600, 800, 1200];
-  const srcSet = widths
-    .map((w) => {
-      const optimizedUrl = getVercelOptimizedImageUrl(src, w);
-      return `${optimizedUrl} ${w}w`;
-    })
-    .join(', ');
-
+  // Use Supabase image URL directly
+  // Supabase CDN handles caching and delivery
   const optimizedSrc = getVercelOptimizedImageUrl(src, width);
 
   return (
-    <picture>
-      {/* WebP format for modern browsers */}
-      <source
-        type="image/webp"
-        sizes={sizes}
-        srcSet={srcSet.replace(/\.jpg|\.png/g, '.webp')}
-      />
-      
-      {/* Fallback JPEG */}
-      <img
-        src={optimizedSrc}
-        alt={alt}
-        srcSet={srcSet}
-        sizes={sizes}
-        width={width}
-        height={height}
-        className={className}
-        loading={priority ? 'eager' : 'lazy'}
-        decoding="async"
-        style={
-          height
-            ? {
-                aspectRatio: `${width}/${height}`,
-                objectFit: 'cover',
-                width: '100%',
-                height: 'auto',
-              }
-            : {}
-        }
-      />
-    </picture>
+    <img
+      src={optimizedSrc}
+      alt={alt}
+      srcSet={`${optimizedSrc} 1x`}
+      sizes={sizes}
+      width={width}
+      height={height}
+      className={className}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding="async"
+      style={
+        height
+          ? {
+              aspectRatio: `${width}/${height}`,
+              objectFit: 'cover',
+              width: '100%',
+              height: 'auto',
+            }
+          : {}
+      }
+    />
   );
 }
 
