@@ -192,10 +192,11 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-sans font-semibold block mb-2">
+                    <label htmlFor="firstName" className="text-sm font-sans font-semibold block mb-2">
                       First Name <span className="text-destructive">*</span>
                     </label>
                     <input
+                      id="firstName"
                       type="text"
                       required
                       value={form.firstName}
@@ -205,10 +206,11 @@ const Contact = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-sans font-semibold block mb-2">
+                    <label htmlFor="lastName" className="text-sm font-sans font-semibold block mb-2">
                       Last Name <span className="text-destructive">*</span>
                     </label>
                     <input
+                      id="lastName"
                       type="text"
                       required
                       value={form.lastName}
@@ -220,10 +222,11 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label className="text-sm font-sans font-semibold block mb-2">
+                  <label htmlFor="phone" className="text-sm font-sans font-semibold block mb-2">
                     WhatsApp Number <span className="text-destructive">*</span>
                   </label>
                   <input
+                    id="phone"
                     type="tel"
                     required
                     value={form.phone}
@@ -234,10 +237,11 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label className="text-sm font-sans font-semibold block mb-2">
+                  <label htmlFor="email" className="text-sm font-sans font-semibold block mb-2">
                     Email Address <span className="text-destructive">*</span>
                   </label>
                   <input
+                    id="email"
                     type="email"
                     required
                     value={form.email}
@@ -248,10 +252,11 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label className="text-sm font-sans font-semibold block mb-2">
+                  <label htmlFor="message" className="text-sm font-sans font-semibold block mb-2">
                     Your Message
                   </label>
                   <textarea
+                    id="message"
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     rows={4}

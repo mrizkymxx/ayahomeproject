@@ -258,6 +258,7 @@ const Index = () => {
                       type="text"
                       name="firstName"
                       placeholder="First Name"
+                      aria-label="First Name"
                       required
                       className="px-3 py-2 bg-muted border-0 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                     />
@@ -265,6 +266,7 @@ const Index = () => {
                       type="text"
                       name="lastName"
                       placeholder="Last Name"
+                      aria-label="Last Name"
                       required
                       className="px-3 py-2 bg-muted border-0 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                     />
@@ -273,6 +275,7 @@ const Index = () => {
                     type="tel"
                     name="phone"
                     placeholder="WhatsApp Number"
+                    aria-label="WhatsApp Number"
                     required
                     className="w-full px-3 py-2 bg-muted border-0 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                   />
@@ -280,6 +283,7 @@ const Index = () => {
                     type="email"
                     name="email"
                     placeholder="Email Address"
+                    aria-label="Email Address"
                     required
                     className="w-full px-3 py-2 bg-muted border-0 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                   />

@@ -231,6 +231,7 @@ const Products = () => {
                 <input
                   type="text"
                   placeholder="Search products..."
+                  aria-label="Search products"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all hover:border-foreground/30 focus:border-foreground/50"
@@ -291,6 +292,7 @@ const Products = () => {
                 <input
                   type="text"
                   placeholder="Search products..."
+                  aria-label="Search products mobile"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all"
@@ -351,6 +353,7 @@ const Products = () => {
                     <input
                       type="text"
                       placeholder="Search..."
+                      aria-label="Search categories"
                       value={categorySearch}
                       onChange={(e) => setCategorySearch(e.target.value)}
                       className="w-full px-3 py-2 text-xs border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all"

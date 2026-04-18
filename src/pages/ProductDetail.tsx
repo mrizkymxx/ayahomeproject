@@ -360,6 +360,7 @@ const ProductDetail = () => {
                   toast({ title: "Link copied!", description: "Product link copied to clipboard" });
                 }}
                 className="absolute top-4 right-4 bg-white/90 dark:bg-background/90 backdrop-blur hover:bg-white dark:hover:bg-background rounded-full p-3 transition-all shadow-lg"
+                aria-label="Copy product link"
               >
                 <Heart size={20} className="text-foreground" />
               </button>
