@@ -333,6 +333,7 @@ const ProductDetail = () => {
                 className="w-full rounded-2xl mb-6 cursor-pointer hover:opacity-90 transition-opacity shadow-lg bg-muted" 
                 width={700} 
                 height={700}
+                loading="lazy"
                 onError={(e) => {
                   console.warn("Failed to load image:", images[selectedImageIndex]);
                   setImageErrors(prev => ({ ...prev, [selectedImageIndex]: true }));
@@ -376,7 +377,8 @@ const ProductDetail = () => {
                     <img 
                       src={img} 
                       alt={`${product.name} ${index + 1}`} 
-                      className="w-full h-full object-cover hover:scale-105 transition-transform" 
+                      className="w-full h-full object-cover hover:scale-105 transition-transform"
+                      loading="lazy" 
                       onError={(e) => {
                         setImageErrors(prev => ({ ...prev, [index]: true }));
                       }}

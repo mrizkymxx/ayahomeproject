@@ -59,7 +59,7 @@ const Footer = () => {
             </div>
 
             <div>
-              <h4 className="font-sans font-semibold text-sm mb-3">Our Workshop</h4>
+              <h3 className="font-sans font-semibold text-sm mb-3">Our Workshop</h3>
               <div className="text-sm text-muted-foreground space-y-1 leading-6">
                 <p className="font-semibold text-foreground">Aya Home Project</p>
                 <p>Serogenen, Pekalongan</p>
@@ -71,7 +71,7 @@ const Footer = () => {
             </div>
 
             <div>
-              <h4 className="font-sans font-semibold text-sm mb-3">Others</h4>
+              <h3 className="font-sans font-semibold text-sm mb-3">Others</h3>
               <div className="flex flex-col gap-2 text-sm">
                 <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
                   Home
