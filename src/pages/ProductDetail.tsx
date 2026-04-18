@@ -1,10 +1,11 @@
 import Layout from "@/components/Layout";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState, useLayoutEffect } from "react";
-import { MessageCircle, Facebook, Twitter, Copy, Check, Loader2, Heart, Share2, MapPin, Truck, Shield, Instagram, Music } from "lucide-react";
+import { MessageCircle, Facebook, Twitter, Copy, Check, Loader2, Heart, Share2, MapPin, Truck, Shield, Instagram, Music, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { applyProductSeoMeta, buildExcerpt } from "@/lib/seo";
+import { OptimizedImage, ResponsiveOptimizedImage } from "@/lib/vercel-image-optimization";
 import afraChair from "@/assets/products/afra-chair.jpg";
 import yolaChair from "@/assets/products/yola-chair.jpg";
 import landaChair from "@/assets/products/landa-chair.jpg";
@@ -327,30 +328,15 @@ const ProductDetail = () => {
           {/* Left: Product Images */}
           <div>
             <div className="relative group">
-              <img 
-                src={images[selectedImageIndex]} 
-                alt={product.name} 
-                className="w-full rounded-2xl mb-6 cursor-pointer hover:opacity-90 transition-opacity shadow-lg bg-muted" 
-                width={700} 
+              <ResponsiveOptimizedImage
+                src={images[selectedImageIndex]}
+                alt={product.name}
+                width={700}
                 height={700}
-                loading="lazy"
-                onError={(e) => {
-                  console.warn("Failed to load image:", images[selectedImageIndex]);
-                  setImageErrors(prev => ({ ...prev, [selectedImageIndex]: true }));
-                  // Fallback to first image or placeholder
-                  if (selectedImageIndex !== 0) {
-                    setSelectedImageIndex(0);
-                  }
-                }}
+                className="w-full rounded-2xl mb-6 cursor-pointer hover:opacity-90 transition-opacity shadow-lg bg-muted"
+                priority={true}
+                sizes="(max-width: 1024px) 100vw, 700px"
               />
-              {imageErrors[selectedImageIndex] && (
-                <div className="absolute inset-0 rounded-2xl bg-muted flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-muted-foreground mb-2">📷</div>
-                    <p className="text-sm text-muted-foreground">Image unavailable</p>
-                  </div>
-                </div>
-              )}
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(window.location.href);
@@ -374,20 +360,13 @@ const ProductDetail = () => {
                         : 'border-border hover:border-foreground/50'
                     }`}
                   >
-                    <img 
+                    <OptimizedImage
                       src={img}
-                      alt={`${product.name} ${index + 1}`} 
+                      alt={`${product.name} ${index + 1}`}
+                      width={150}
+                      height={150}
                       className="w-full h-full object-cover hover:scale-105 transition-transform"
-                      loading="lazy" 
-                      onError={(e) => {
-                        setImageErrors(prev => ({ ...prev, [index]: true }));
-                      }}
                     />
-                    {imageErrors[index] && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-muted text-xs text-muted-foreground">
-                        No image
-                      </div>
-                    )}
                   </button>
                 ))}
               </div>
