@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { applyPageSeoMeta } from "@/lib/seo";
-import { getOptimizedImageUrl } from "@/lib/image-optimization";
 import productsHero from "@/assets/products-hero.jpg";
 import afraChair from "@/assets/products/afra-chair.jpg";
 import yolaChair from "@/assets/products/yola-chair.jpg";
@@ -437,20 +436,14 @@ const Products = () => {
                         <div className="bg-background border border-border rounded-xl overflow-hidden h-full flex flex-col transition-all duration-300 hover:border-foreground/30 hover:shadow-2xl hover:-translate-y-1">
                           {/* Image Container with Badges */}
                           <div className="aspect-square flex items-center justify-center p-6 bg-gradient-to-br from-secondary/50 to-secondary/10 group-hover:from-secondary/80 group-hover:to-secondary/30 transition-all duration-300 relative overflow-hidden">
-                            <picture>
-                              <source 
-                                srcSet={getOptimizedImageUrl(productImage, { format: 'webp', width: 400 }) || ''}
-                                type="image/webp"
-                              />
-                              <img
-                                src={getOptimizedImageUrl(productImage, { format: 'jpg', width: 400 }) || productImage}
-                                alt={product.name}
-                                className="max-h-full object-contain group-hover:scale-110 transition-transform duration-300"
-                                loading="lazy"
-                                width={400}
-                                height={400}
-                              />
-                            </picture>
+                            <img
+                              src={productImage}
+                              alt={product.name}
+                              className="max-h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                              loading="lazy"
+                              width={400}
+                              height={400}
+                            />
                             
                             {/* Badges */}
                             <div className="absolute top-3 right-3 flex gap-2 flex-wrap justify-end">
