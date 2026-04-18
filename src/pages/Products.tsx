@@ -195,38 +195,45 @@ const Products = () => {
                 />
               </div>
 
-              {/* Category */}
-              <select
-                value={activeCategory || ""}
-                onChange={(e) => {
-                  if (e.target.value) {
-                    setSearchParams({ category: e.target.value });
-                  } else {
-                    setSearchParams({});
-                  }
-                }}
-                className="px-3 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all hover:border-foreground/30 font-medium"
-              >
-                <option value="">All Categories</option>
+              {/* Category Dropdown */}
+              <div className="relative">
+                <select
+                  value={activeCategory || ""}
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      setSearchParams({ category: e.target.value });
+                    } else {
+                      setSearchParams({});
+                    }
+                  }}
+                  className="appearance-none px-4 py-2.5 pr-10 text-sm font-medium border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background bg-background hover:border-foreground/40 transition-all cursor-pointer shadow-sm"
+                >
+                  <option value="">All Categories</option>
                 {categories.map((cat) => (
                   <option key={cat.name} value={cat.name}>
                     {cat.name}
                   </option>
                 ))}
               </select>
+                <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
 
-              {/* Sort */}
-              <div className="flex items-center gap-2">
-                <SlidersHorizontal size={16} className="text-muted-foreground flex-shrink-0" />
+              {/* Sort Dropdown */}
+              <div className="relative">
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-3 py-2.5 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background/50 transition-all hover:border-foreground/30 font-medium"
+                  className="appearance-none px-4 py-2.5 pr-10 text-sm font-medium border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background bg-background hover:border-foreground/40 transition-all cursor-pointer shadow-sm"
                 >
                   <option value="name">Sort by Name</option>
                   <option value="newest">Newest First</option>
                   <option value="popular">Most Popular</option>
                 </select>
+                <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
               </div>
 
               {/* Active Filter Indicator */}
