@@ -178,8 +178,8 @@ const Products = () => {
 
       {/* Products Grid */}
       <section className="section-container py-12">
-        {/* Search & Sort Bar */}
-        <div className="mb-8 p-4 md:p-6 bg-gradient-to-r from-secondary/50 to-secondary/30 rounded-2xl border border-border/50 backdrop-blur-sm">
+        {/* Search & Sort Bar - Sticky */}
+        <div className="sticky top-0 z-30 mb-8 p-4 md:p-6 bg-background border-b border-border/50 rounded-2xl shadow-sm">
           <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
             <div className="relative flex-1 md:flex-none md:w-96">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
