@@ -46,7 +46,12 @@ export function getVercelOptimizedImageUrl(
 ): string {
   if (!src) return '';
   
-  // Use Vercel Image Proxy API. This relies on the vercel.json "images" configuration.
+  // For Supabase URLs, use them directly - Supabase has its own CDN and optimization
+  if (src.includes('supabase')) {
+    return src;
+  }
+  
+  // Use Vercel Image Proxy API only for non-Supabase URLs
   const isDev = import.meta.env && import.meta.env.DEV;
   if (!isDev) {
     let url = `/_vercel/image?url=${encodeURIComponent(src)}`;
@@ -93,12 +98,9 @@ export function OptimizedImage({
       className={className}
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
-      style={{
-        aspectRatio: aspectRatio || 'auto',
-        objectFit: 'cover',
-        width: '100%',
-        height: '100%',
-      }}
+      style={
+        aspectRatio ? { aspectRatio, objectFit: 'cover' } : { objectFit: 'cover' }
+      }
     />
   );
 }
@@ -134,14 +136,7 @@ export function ResponsiveOptimizedImage({
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
       style={
-        height
-          ? {
-              aspectRatio: `${width}/${height}`,
-              objectFit: 'cover',
-              width: '100%',
-              height: '100%',
-            }
-          : {}
+        height ? { aspectRatio: `${width}/${height}`, objectFit: 'cover' } : { objectFit: 'cover' }
       }
     />
   );
