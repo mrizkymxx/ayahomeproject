@@ -160,11 +160,11 @@ const Index = () => {
             {heroSlides.map((slide, index) => (
               <SwiperSlide key={index}>
                 <div className="relative w-full h-full">
-                  <img 
-                    src={slide.image} 
+                  <img
+                    src={slide.image}
                     alt={slide.title}
-                    className="w-full h-full object-cover rounded-2xl" 
-                    width={1920} 
+                    className="w-full h-full object-cover rounded-2xl"
+                    width={1920}
                     height={800}
                     fetchPriority={index === 0 ? "high" : "auto"}
                     loading={index === 0 ? "eager" : "lazy"}
@@ -196,8 +196,8 @@ const Index = () => {
             { icon: Handshake, title: "B2B & Hospitality", desc: "Trusted partner for hotels, restaurants, resorts, and interior designers across 15+ countries." },
             { icon: MessageSquare, title: "Free Consultation", desc: "Expert advice on Suar wood selection, dimensions, finishes, and international shipping logistics." },
           ].map((feature) => (
-            <div 
-              key={feature.title} 
+            <div
+              key={feature.title}
               className="text-center p-6 rounded-xl hover:bg-secondary transition-colors group"
               data-aos="fade-up"
             >
@@ -219,7 +219,7 @@ const Index = () => {
         </p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8">
           {homeProducts.map((product, index) => (
-            <Link 
+            <Link
               to={`/products/${product.slug}`}
               key={product.id}
               className="group text-center animate-fade-in-up"
@@ -248,7 +248,7 @@ const Index = () => {
               <p className="text-muted-foreground leading-relaxed mb-6">
                 Aya Home Project specializes in premium Suar (Trembesi) wood furniture from Jepara, Indonesia. We source the finest Suar slabs and transform them into stunning live-edge dining tables, coffee tables, bar tops, and statement pieces for homes and hospitality projects worldwide.
               </p>
-              
+
               {/* Request Catalog Form */}
               <div className="bg-background p-6 rounded-xl mb-6">
                 <h3 className="font-sans font-bold text-lg mb-4">Request Our Catalog</h3>
@@ -348,8 +348,8 @@ const Index = () => {
               icon: ShieldCheck,
             },
           ].map((item, index) => (
-            <div 
-              key={item.title} 
+            <div
+              key={item.title}
               className="p-6 animate-fade-in-up"
               style={{ animationDelay: `${index * 100}ms` }}
             >
@@ -383,9 +383,9 @@ const Index = () => {
               { img: landaChair, name: "Statement Console", category: "Entryway", badge: "Most Popular" },
               { img: briliyChair, name: "Premium Bar Top", category: "Hospitality", badge: "Trending" },
             ].map((product, index) => (
-              <Link 
-                to="/products" 
-                key={product.name} 
+              <Link
+                to="/products"
+                key={product.name}
                 className="group"
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
@@ -398,13 +398,13 @@ const Index = () => {
 
                   {/* Image */}
                   <div className="bg-background aspect-square flex items-center justify-center p-8 group-hover:bg-muted transition-colors duration-300 overflow-hidden">
-                    <img 
-                      src={product.img} 
-                      alt={product.name} 
-                      className="max-h-full object-contain group-hover:scale-125 transition-transform duration-500" 
-                      loading="lazy" 
-                      width={300} 
-                      height={300} 
+                    <img
+                      src={product.img}
+                      alt={product.name}
+                      className="max-h-full object-contain group-hover:scale-125 transition-transform duration-500"
+                      loading="lazy"
+                      width={300}
+                      height={300}
                     />
                   </div>
                 </div>

@@ -93,16 +93,12 @@ export function OptimizedImage({
       className={className}
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
-      style={
-        aspectRatio
-          ? {
-              aspectRatio,
-              objectFit: 'cover',
-              width: '100%',
-              height: '100%',
-            }
-          : {}
-      }
+      style={{
+        aspectRatio: aspectRatio || 'auto',
+        objectFit: 'cover',
+        width: '100%',
+        height: '100%',
+      }}
     />
   );
 }

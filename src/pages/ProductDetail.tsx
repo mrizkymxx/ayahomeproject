@@ -372,7 +372,7 @@ const ProductDetail = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`rounded-xl w-full overflow-hidden border-2 transition-all cursor-pointer relative bg-muted flex-1 ${
+                    className={`rounded-xl w-full overflow-hidden border-2 transition-all cursor-pointer relative bg-muted flex-1 p-0 ${
                       selectedImageIndex === index
                         ? 'border-foreground shadow-lg'
                         : 'border-border hover:border-foreground/50'
