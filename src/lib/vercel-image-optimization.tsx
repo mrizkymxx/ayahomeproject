@@ -99,7 +99,7 @@ export function OptimizedImage({
               aspectRatio,
               objectFit: 'cover',
               width: '100%',
-              height: 'auto',
+              height: '100%',
             }
           : {}
       }
@@ -143,7 +143,7 @@ export function ResponsiveOptimizedImage({
               aspectRatio: `${width}/${height}`,
               objectFit: 'cover',
               width: '100%',
-              height: 'auto',
+              height: '100%',
             }
           : {}
       }

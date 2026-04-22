@@ -344,13 +344,13 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Left: Product Images */}
           <div>
-            <div className="relative group">
+            <div className="relative group w-full max-w-2xl mx-auto lg:mx-0 aspect-square">
               <ResponsiveOptimizedImage
                 src={images[selectedImageIndex]}
                 alt={product.name}
                 width={700}
                 height={700}
-                className="w-full rounded-2xl mb-6 cursor-pointer hover:opacity-90 transition-opacity shadow-lg bg-muted"
+                className="w-full h-full rounded-2xl cursor-pointer hover:opacity-90 transition-opacity shadow-lg bg-muted"
                 priority={true}
                 sizes="(max-width: 1024px) 100vw, 700px"
               />
@@ -367,12 +367,12 @@ const ProductDetail = () => {
             </div>
             
             {images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-4 gap-2 mt-6">
                 {images.slice(0, 4).map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`rounded-xl w-full h-24 overflow-hidden border-2 transition-all cursor-pointer relative bg-muted ${
+                    className={`rounded-xl w-full aspect-square overflow-hidden border-2 transition-all cursor-pointer relative bg-muted ${
                       selectedImageIndex === index
                         ? 'border-foreground shadow-lg'
                         : 'border-border hover:border-foreground/50'
